@@ -1,0 +1,150 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 256px; // w-64
+  background-color: var(--dc-surface-container-low);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 10px 0 30px -5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  z-index: 50;
+  transition: transform 0.3s ease-in-out;
+
+  @media (max-width: 767px) {
+    display: none; // Hide on mobile/tablet per prototype logic, can toggle with custom trigger if needed
+  }
+}
+
+.brandArea {
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 32px;
+}
+
+.brandTitle {
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.05em;
+  font-weight: 900;
+  font-style: italic;
+  color: #FFD700; // Gold accent
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.managerPanel {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.managerLabel {
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.15em;
+  font-weight: 800;
+  color: var(--dc-on-surface-variant);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.managerTier {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #FFD700; // Gold
+  margin: 0;
+}
+
+// Nav links
+.navContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  color: var(--dc-on-surface-variant);
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--dc-secondary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.navLinkActive {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  color: #FFD700;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #FFD700;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.navIcon {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+}
+
+.navIconActive {
+  font-size: 24px;
+  font-variation-settings: 'FILL' 1, 'wght' 700;
+}
+
+// Footer Area of Side Nav
+.footerArea {
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.goldButton {
+  width: 100%;
+  background: #FFD700;
+  color: var(--dc-surface-container-lowest);
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  margin-bottom: 16px;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

@@ -1,0 +1,457 @@
+.loginWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--dc-font);
+  background-color: var(--dc-background);
+  color: var(--dc-on-background);
+}
+
+// Background atmospheric layers
+.backgroundContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fieldPattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.08), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(74, 95, 129, 0.15), transparent 50%);
+}
+
+.pitchLineCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.pitchLineCenter {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+// Card container with glass effect and transform support
+.cardContainer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  perspective: 1000px;
+}
+
+.glassPanel {
+  background: rgba(22, 46, 77, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+  will-change: transform;
+
+  @media (min-width: 768px) {
+    padding: 32px;
+  }
+}
+
+// Branding Header
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.logoContainer {
+  margin-bottom: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(39, 42, 44, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.5s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.logoImage {
+  height: 96px;
+  width: auto;
+  object-fit: contain;
+}
+
+.title {
+  font-family: var(--dc-font);
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.02em;
+  color: var(--dc-secondary);
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0;
+
+  @media (min-width: 768px) {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+
+.subtitle {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  color: var(--dc-on-surface-variant);
+  margin-top: 4px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+// Form Elements
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--dc-on-surface-variant);
+  text-transform: uppercase;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dc-on-surface-variant);
+  transition: color 0.2s ease;
+  pointer-events: none;
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+}
+
+.inputField {
+  width: 100%;
+  background: #05162B;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px 16px 16px 48px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--dc-on-surface);
+  outline: none;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: rgba(142, 144, 152, 0.5);
+  }
+
+  &:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--dc-primary);
+  }
+}
+
+.inputFieldWithAction {
+  @extend .inputField;
+  padding-right: 48px;
+}
+
+.inputWrapper:focus-within {
+  .inputIcon {
+    color: var(--dc-primary);
+  }
+}
+
+.toggleButton {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--dc-on-surface-variant);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  padding: 0;
+
+  &:hover {
+    color: var(--dc-on-surface);
+  }
+}
+
+// Remember me & Forgot row
+.actionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #05162B;
+  accent-color: var(--dc-primary);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--dc-primary);
+    outline-offset: 2px;
+  }
+}
+
+.checkboxText {
+  color: var(--dc-on-surface-variant);
+  transition: color 0.2s ease;
+}
+
+.checkboxLabel:hover .checkboxText {
+  color: var(--dc-on-surface);
+}
+
+.forgotLink {
+  color: var(--dc-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  text-underline-offset: 4px;
+
+  &:hover {
+    color: var(--dc-secondary-fixed);
+    text-decoration: underline;
+  }
+}
+
+// Gold button
+.goldGradient {
+  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+}
+
+.submitButton {
+  width: 100%;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--dc-on-secondary-fixed);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.btnContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.buttonOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+}
+
+.submitButton:hover .buttonOverlay {
+  transform: translateX(100%);
+}
+
+// Divider
+.dividerRow {
+  position: relative;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dividerLine {
+  position: absolute;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.dividerText {
+  position: relative;
+  z-index: 2;
+  background: var(--dc-surface-container-low);
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--dc-on-surface-variant);
+  text-transform: uppercase;
+}
+
+// Social Logins
+.socialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.socialButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 8px;
+  background: rgba(50, 53, 55, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--dc-surface-container-highest);
+  }
+}
+
+.socialIconGoogle {
+  width: 24px;
+  height: 24px;
+  filter: grayscale(100%);
+  transition: filter 0.2s ease;
+}
+
+.socialButton:hover .socialIconGoogle {
+  filter: grayscale(0%);
+}
+
+.socialIconSvg {
+  width: 24px;
+  height: 24px;
+  fill: var(--dc-on-surface-variant);
+  transition: fill 0.2s ease;
+}
+
+.socialButton:hover {
+  .socialIconFacebook {
+    fill: var(--dc-primary);
+  }
+  .socialIconApple {
+    fill: var(--dc-secondary);
+  }
+}
+
+// Footer call to action
+.footerText {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--dc-on-surface-variant);
+}
+
+.registerLink {
+  color: var(--dc-secondary-fixed);
+  font-weight: 700;
+  margin-left: 4px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--dc-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+// Spin animation for loaders
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

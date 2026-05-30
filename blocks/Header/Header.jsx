@@ -20,25 +20,25 @@ export default function Header() {
       >
         <nav className={styles.nav}>
           {/* Logo */}
-          <div className={styles.logoWrap}>
+         <Link href="/"> <div className={styles.logoWrap}>
             <img src="/premium_logo.png" alt="DreamCup Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
-            <span className={styles.logoText}>DreamCup</span>
-          </div>
+            <span className={styles.logoText}>Dream<span style={{ color: '#ffe16d' }}>Cup</span></span>
+          </div></Link>
 
           {/* Nav Links (Desktop) */}
           <div className={styles.navLinks}>
-            <a href="#" className={`${styles.navLink} ${styles.active}`}>Lobby</a>
-            <a href="#" className={styles.navLink}>My Teams</a>
-            <a href="#" className={styles.navLink}>Leaderboard</a>
-            <a href="#" className={styles.navLink}>Matches</a>
-            <a href="#" className={styles.navLink}>Rules</a>
+            <a href="/" className={`${styles.navLink} ${styles.active}`}>Lobby</a>
+            <a href="/my-team" className={styles.navLink}>My Teams</a>
+            <a href="/leaderboard" className={styles.navLink}>Leaderboard</a>
+            <a href="/matches" className={styles.navLink}>Matches</a>
+            <a href="/rules" className={styles.navLink}>Rules</a>
           </div>
 
           {/* Right Icons */}
           <div className={styles.actions}>
-            <span className={`material-symbols-outlined ${styles.iconBtn}`}>notifications</span>
-            <span className={`material-symbols-outlined ${styles.iconBtn}`}>account_circle</span>
-            <span className={`material-symbols-outlined ${styles.iconBtn} ${styles.hideMobile}`}>settings</span>
+            <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn}`}>notifications</span></Link>
+            <Link href="/profile"><span className={`material-symbols-outlined ${styles.iconBtn}`}>account_circle</span></Link>
+            <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn} ${styles.hideMobile}`}>settings</span></Link>
             {/* Mobile Hamburger */}
             <span 
               className={`material-symbols-outlined ${styles.iconBtn} ${styles.showMobile}`}
@@ -68,11 +68,11 @@ export default function Header() {
             </div>
             
             <div className={styles.sidebarLinks}>
-              <a href="#" className={`${styles.sidebarLink} ${styles.active}`}>Lobby</a>
-              <a href="#" className={styles.sidebarLink}>My Teams</a>
-              <a href="#" className={styles.sidebarLink}>Leaderboard</a>
-              <a href="#" className={styles.sidebarLink}>Matches</a>
-              <a href="#" className={styles.sidebarLink}>Rules</a>
+              <a href="/" className={`${styles.sidebarLink} ${styles.active}`}>Lobby</a>
+              <a href="/my-team" className={styles.sidebarLink}>My Teams</a>
+              <a href="/leaderboard" className={styles.sidebarLink}>Leaderboard</a>
+              <a href="/matches" className={styles.sidebarLink}>Matches</a>
+              <a href="/rules" className={styles.sidebarLink}>Rules</a>
               <a href="#" className={styles.sidebarLink}>Settings</a>
             </div>
           </div>

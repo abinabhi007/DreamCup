@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Header from '../../blocks/Header/Header';
-import Footer from '../../blocks/Footer/Footer';
-import AboutContent from '../../blocks/AboutContent/AboutContent';
+import SideNav from '../../blocks/SideNav/SideNav';
+import RulesContent from '../../blocks/RulesContent/RulesContent';
 import Loader from '../../components/Loader/Loader';
 
-export default function AboutUsPage() {
+export default function RulesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,10 +17,10 @@ export default function AboutUsPage() {
   return (
     <>
       <Head>
-        <title>About Us | DreamCup Elite Performance Fantasy</title>
+        <title>Rules | DreamCup Elite</title>
         <meta
           name="description"
-          content="DreamCup is a performance-driven fantasy platform engineered for those who demand more than luck."
+          content="Master the mechanics of elite management. Learn the DreamCup fantasy game rules."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -29,10 +28,9 @@ export default function AboutUsPage() {
       <Loader isLoading={loading} />
 
       {!loading && (
-        <div style={{ minHeight: '100vh', backgroundColor: 'var(--dc-background)', color: 'var(--dc-on-surface)' }}>
-          <Header />
-          <AboutContent />
-          <Footer />
+        <div style={{ display: 'block', minHeight: '100vh', backgroundColor: 'var(--dc-background)' }}>
+          <SideNav />
+          <RulesContent />
         </div>
       )}
     </>

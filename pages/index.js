@@ -11,7 +11,7 @@ import CtaBanner from '../blocks/CtaBanner/Ctabanner';
 import Footer from '../blocks/Footer/Footer';
 import Loader from '../components/Loader/Loader';
 
-export default function Home() {
+export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
