@@ -1,0 +1,158 @@
+// ── Hero Section ──────────────────────────────────────────────────────────────
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 68px;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    url('https://lh3.googleusercontent.com/aida-public/AB6AXuChvMy3AictCTPR3hnGMVtvuQSsjgMvDf_-XQCyVwUm0SIjrCOfxy_BueabiJ3XSmUx-rq1cJ9A4_BiuhCZV_fYPxEGiJNWg9R1MLbNqO8itPwWWiKw-Fe0dLdSfkdGLzDoyvaz20D_oerdjmhYNR4oHr3ompSAdTwjVbmgLeM6LCRg8lIIiIgFW_fUpQW0O608_pcv0FqFtLXMGZmUo6LF9Bzu5RHkUp0vmznwfYlV0K9MDnpFSOWARlv_3uLhB9cCZ4-Eg5JS2aM')
+    center / cover no-repeat;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(16,20,21,0.6) 0%, rgba(16,20,21,0.85) 60%, #101415 100%);
+}
+
+.heroInner {
+  position: relative;
+  z-index: 3;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+// Live badge (like prototype: shield icon + "WORLD CUP SEASON IS LIVE")
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 35, 66, 0.75);
+  border: 1px solid rgba(178, 199, 239, 0.25);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--dc-primary);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.badgeDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+  animation: badgePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+// Headline — matches prototype "Build Your Dream Team. / Chase World Cup Glory."
+.headline {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  color: var(--dc-secondary);
+  margin-bottom: 0;
+
+  @media (max-width: 767px) {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+.headlineGold {
+  color: var(--dc-secondary-fixed);
+  display: block;
+}
+
+// Subtext
+.subtext {
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--dc-on-surface-variant);
+  max-width: 620px;
+  margin: 20px auto 32px;
+}
+
+// CTA row
+.ctaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 32px;
+  background: var(--dc-secondary-fixed);
+  color: var(--dc-on-secondary);
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: var(--dc-font);
+  box-shadow: 0 0 40px rgba(255, 225, 109, 0.25);
+
+  &:hover {
+    background: #e9c400;
+    transform: translateY(-1px);
+    color: var(--dc-on-secondary);
+    text-decoration: none;
+  }
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 32px;
+  background: transparent;
+  color: var(--dc-on-background);
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: var(--dc-font);
+
+  &:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.4);
+    color: #fff;
+    text-decoration: none;
+  }
+}

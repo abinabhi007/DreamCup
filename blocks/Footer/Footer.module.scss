@@ -1,0 +1,101 @@
+// ── Footer ────────────────────────────────────────────────────────────────────
+// Matches prototype: py-xl bg-surface-container-lowest border-t border-white/5 no shadow
+.footer {
+  padding: 32px 0;
+  background: var(--dc-surface-container-lowest);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.inner {
+  // flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-md
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  gap: 16px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.colLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  @media (max-width: 767px) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  // font-headline-md text-headline-md font-bold text-secondary
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: var(--dc-secondary);
+}
+
+.brandDesc {
+  // font-body-sm text-body-sm text-on-surface-variant max-w-xs
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--dc-on-surface-variant);
+  max-width: 320px;
+  margin: 0;
+}
+
+.links {
+  // flex flex-wrap justify-center gap-lg
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.link {
+  // text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-body-sm text-body-sm
+  color: var(--dc-on-surface-variant);
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--dc-primary);
+    text-decoration: none;
+  }
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--dc-on-surface-variant);
+
+  span {
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--dc-secondary);
+    }
+  }
+}
+
+.copyright {
+  // text-center mt-xl text-on-surface-variant opacity-50 font-body-sm text-body-sm
+  text-align: center;
+  margin-top: 32px;
+  color: var(--dc-on-surface-variant);
+  opacity: 0.5;
+  font-size: 14px;
+  line-height: 20px;
+}

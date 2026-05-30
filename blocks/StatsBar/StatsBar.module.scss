@@ -1,0 +1,53 @@
+// ── Stats Bar ─────────────────────────────────────────────────────────────────
+// Matches prototype: py-24 bg-surface-container-high border-y border-white/5
+.statsBar {
+  padding: 40px 24px;
+  background: var(--dc-surface-container-high);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.statItem {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 32px;
+  gap: 6px;
+
+  &.divided {
+    border-right: 1px solid var(--dc-outline-variant);
+
+    @media (max-width: 575px) {
+      border-right: none;
+      border-bottom: 1px solid var(--dc-outline-variant);
+    }
+  }
+}
+
+.statValue {
+  // matches prototype: font-display-lg text-secondary-fixed
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--dc-secondary-fixed);
+  font-family: var(--dc-font);
+}
+
+.statLabel {
+  // matches: text-on-surface-variant
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--dc-on-surface-variant);
+}

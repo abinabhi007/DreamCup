@@ -1,19 +1,8 @@
+// Home.module.scss
+// This file is intentionally minimal — each home page section
+// has its own dedicated SCSS module under styles/.
+
 .main {
+  // Ensures sections flow correctly beneath the fixed header
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-
-  h1 {
-    color: #333;
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-
-  p {
-    color: #666;
-    font-size: 1.2rem;
-  }
 }

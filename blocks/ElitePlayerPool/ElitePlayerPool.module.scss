@@ -1,0 +1,326 @@
+// ── Elite Player Pool ─────────────────────────────────────────────────────────
+.section {
+  padding: 80px 24px;
+  background: var(--dc-background);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sectionTitle {
+  // font-headline-md text-headline-md text-secondary
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: var(--dc-secondary);
+  margin: 0;
+}
+
+.sectionSub {
+  color: var(--dc-on-surface-variant);
+  font-size: 14px;
+  margin: 2px 0 0;
+}
+
+.viewMarket {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--dc-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: text-decoration 0.2s;
+  font-family: var(--dc-font);
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ── Main grid (prototype: grid-cols-12, h-[600px]) ─────────────────────────
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; // 8:4 approximate
+  gap: 16px;
+  min-height: 600px;
+
+  @media (max-width: 991px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+// ── Large card (Mbappé — md:col-span-8) ──────────────────────────────────────
+.cardLarge {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 400px; // fallback for mobile
+
+  &:hover .cardImg {
+    transform: scale(1.08);
+  }
+}
+
+// ── Small card (Messi / Haaland — md:col-span-4) ─────────────────────────────
+.rightCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 991px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cardSmall {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 280px; // fallback for mobile
+
+  &:hover .cardImg {
+    transform: scale(1.08);
+    opacity: 1 !important;
+  }
+}
+
+// ── Shared card image ─────────────────────────────────────────────────────────
+.cardImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease, opacity 0.4s ease;
+}
+
+.cardImgDim {
+  opacity: 0.6;
+}
+
+// ── Gradient overlay ──────────────────────────────────────────────────────────
+.cardGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #101415 0%, rgba(16,20,21,0.2) 50%, transparent 100%);
+}
+
+// ── Large card bottom info ────────────────────────────────────────────────────
+.cardBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cardBottomLeft {}
+.cardBottomRight { text-align: right; }
+
+.captainBadge {
+  display: inline-block;
+  background: var(--dc-secondary-fixed);
+  color: var(--dc-on-secondary-fixed);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.playerName {
+  // font-display-lg-mobile text-secondary
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--dc-secondary);
+  margin: 0;
+}
+
+.playerMeta {
+  color: var(--dc-on-surface-variant);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.pts {
+  // text-secondary-fixed font-display-lg-mobile
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--dc-secondary-fixed);
+  margin: 0;
+}
+
+.ptsLabel {
+  // text-label-caps text-on-surface-variant
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dc-on-surface-variant);
+}
+
+// ── Small card bottom ─────────────────────────────────────────────────────────
+.cardBottomSm {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 2;
+}
+
+.playerNameSm {
+  // font-headline-md text-headline-md text-secondary
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: var(--dc-secondary);
+  margin: 0;
+}
+
+.playerMetaSm {
+  color: var(--dc-on-surface-variant);
+  font-size: 16px;
+}
+
+.ptsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.1);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.ptsBadgeText {
+  // text-secondary font-data-mono
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dc-secondary);
+}
+
+// ── Leaderboard (md:col-span-8 in bottom row) ─────────────────────────────────
+.leaderboard {
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  grid-column: 1 / -1; // span full right column bottom row
+}
+
+.lbTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--dc-secondary);
+  margin-bottom: 16px;
+}
+
+.lbList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lbRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255,255,255,0.1);
+  }
+}
+
+.lbLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lbRank {
+  // font-data-mono text-on-surface-variant
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dc-on-surface-variant);
+  width: 24px;
+
+  &.lbRankTop {
+    color: var(--dc-secondary-fixed);
+  }
+}
+
+.lbAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(178, 199, 239, 0.3);
+  object-fit: cover;
+}
+
+.lbName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dc-secondary);
+  margin: 0;
+}
+
+.lbMeta {
+  font-size: 14px;
+  color: var(--dc-on-surface-variant);
+  margin: 0;
+}
+
+.lbPts {
+  // font-display-lg-mobile text-primary
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--dc-primary);
+
+  @media (max-width:778px){
+    font-size: 15px;
+  }
+}
