@@ -3,17 +3,25 @@ import Head from 'next/head';
 import SideNav from '../../blocks/SideNav/SideNav';
 import ProfileContent from '../../blocks/ProfileContent/ProfileContent';
 import Loader from '../../components/Loader/Loader';
+import { useRouter } from 'next/router';
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // Simulate premium dashboard initialization loader
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    
+    // Simulate premium dashboard initialization loader 
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1800);
     return () => clearTimeout(timer);
-  }, []);
+  }, [router]);
 
   return (
     <>

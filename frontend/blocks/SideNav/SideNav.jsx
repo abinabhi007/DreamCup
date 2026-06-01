@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from './SideNav.module.scss';
+import toast from 'react-hot-toast';
 
 export default function SideNav() {
   const router = useRouter();
@@ -15,6 +16,12 @@ export default function SideNav() {
     { name: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
     
   ];
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    toast.success("Logout successfully");
+    router.push("/");
+  }
 
   return (
     <aside className={styles.sidebar}>
@@ -65,10 +72,10 @@ export default function SideNav() {
           <span className="material-symbols-outlined">menu_book</span>
           <span>Rules</span>
         </Link>
-        <Link href="/login" className={styles.navLink}>
+        <div className={styles.navLink} onClick={handleLogout} style={{cursor:"pointer"}}>
           <span className="material-symbols-outlined">logout</span>
           <span>Logout</span>
-        </Link>
+        </div>
       </div>
     </aside>
   );

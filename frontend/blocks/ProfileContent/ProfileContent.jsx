@@ -1,9 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './ProfileContent.module.scss';
+import { getProfile } from '../../src/services/authService';
 
 export default function ProfileContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewType, setViewType] = useState('chart'); // 'chart' | 'table'
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const data = await getProfile(token);
+          if (data && data.success) {
+            setProfileData(data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch profile", error);
+        }
+      }
+    };
+    fetchProfile();
+  }, []);
+
 
   const handleEditProfile = () => {
     alert('Edit Profile mode coming soon!');
@@ -54,13 +74,13 @@ export default function ProfileContent() {
           
           <div className={styles.userGroup}>
             <div className={styles.userText}>
-              <p className={styles.userName}>Alex Rivers</p>
-              <p className={styles.userTitle}>ELITE MANAGER</p>
+              <p className={styles.userName}>{profileData?.user?.name}</p>
+              <p className={styles.userTitle}>{profileData?.role}</p>
             </div>
             <img 
               alt="User profile avatar" 
               className={styles.userAvatar} 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdUa76z0i-su3duW4oo2oCgrgsARwp6Ozrel3PvY5Mg595coXaOvuWs9NS6ymkI5cOZEKSThn22DslhLhd23nAA6ggRWc2fo5TB_2baJ-3sYFHq6LJkIcu0EO5zoIeZLGv_Y8JEY2GXhNlYERZ7-UNuUxqnFIt7mLUU5ZGKRZXff-DY0NuiyNWEQfNqOHQaJZGOSAjyxXdDZ-HUtPI337V2JqRk23601zAeWbEsgbEeEcH-QWM-_IoxGi8GsmrelciYzp64T_i5iU" 
+              src={profileData?.user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuAdUa76z0i-su3duW4oo2oCgrgsARwp6Ozrel3PvY5Mg595coXaOvuWs9NS6ymkI5cOZEKSThn22DslhLhd23nAA6ggRWc2fo5TB_2baJ-3sYFHq6LJkIcu0EO5zoIeZLGv_Y8JEY2GXhNlYERZ7-UNuUxqnFIt7mLUU5ZGKRZXff-DY0NuiyNWEQfNqOHQaJZGOSAjyxXdDZ-HUtPI337V2JqRk23601zAeWbEsgbEeEcH-QWM-_IoxGi8GsmrelciYzp64T_i5iU"} 
             />
           </div>
         </div>
@@ -83,21 +103,24 @@ export default function ProfileContent() {
             <div className={styles.avatarWrapper}>
               <div className={styles.profileAvatarFrame}>
                 <img 
-                  alt="Alex Rivers Avatar" 
+                  alt="Profile Avatar" 
                   className={styles.profileAvatar} 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGlH6OHIQZT-Jtv_DJWUSRbqPYCfgQ684ue1hX_pjtCyL1my5bjJHcapXAKVsygReV_7vi_KVDENFUSZecDyRyzo3sRV1-O8CtGyOJ6_-xZqRR6IEehbMnKozSbn0KRc40Dj8-9nHyutiISnfcheEOEboCHobCPLnoJaw5ypjeHm0MnMGrNdG584U1xEGxVk78gIeiJ3rYKpVN1dA98jBxhcIABu-JJ28qi7CCuirzynqhSMOVg9Rw5m7ZA4VZWOwHbDUPnYB66wM" 
+                  src={profileData?.user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuDGlH6OHIQZT-Jtv_DJWUSRbqPYCfgQ684ue1hX_pjtCyL1my5bjJHcapXAKVsygReV_7vi_KVDENFUSZecDyRyzo3sRV1-O8CtGyOJ6_-xZqRR6IEehbMnKozSbn0KRc40Dj8-9nHyutiISnfcheEOEboCHobCPLnoJaw5ypjeHm0MnMGrNdG584U1xEGxVk78gIeiJ3rYKpVN1dA98jBxhcIABu-JJ28qi7CCuirzynqhSMOVg9Rw5m7ZA4VZWOwHbDUPnYB66wM"} 
                 />
               </div>
-              <div className={styles.verifiedBadge} title="Verified Elite Manager">
-                <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'FILL' 1" }}>
-                  verified
-                </span>
-              </div>
+              
             </div>
 
             {/* Profile Meta texts */}
             <div className={styles.profileMeta}>
-              <h2 className={styles.profileName}>Alex Rivers</h2>
+              <div className={styles.nameRow}>
+                <h2 className={styles.profileName}>{profileData?.user?.name}</h2>
+                <div className={styles.verifiedBadge} title="Verified Elite Manager">
+                  <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'FILL' 1" }}>
+                    verified
+                  </span>
+                </div>
+              </div>
               <div className={styles.tagsRow}>
                 <div className={styles.fanTag}>
                   <img 

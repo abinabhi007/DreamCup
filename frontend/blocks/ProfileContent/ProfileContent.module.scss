@@ -224,9 +224,6 @@
 }
 
 .verifiedBadge {
-  position: absolute;
-  bottom: -8px;
-  right: -8px;
   background: #FFD700;
   color: var(--dc-surface-container-lowest);
   padding: 4px;
@@ -242,6 +239,18 @@
 
   @media (min-width: 768px) {
     text-align: left;
+  }
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  @media (min-width: 768px) {
+    justify-content: flex-start;
   }
 }
 

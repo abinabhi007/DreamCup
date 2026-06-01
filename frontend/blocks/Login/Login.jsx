@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from './Login.module.scss';
+import { loginUser } from '../../src/services/authService';
+import { toast } from 'react-hot-toast';
 
 export default function Login() {
   const router = useRouter();
@@ -43,21 +45,28 @@ export default function Login() {
   }, []);
 
   // Form Submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitStatus !== 'idle') return;
 
     setSubmitStatus('loading');
 
-    // Simulate elite verification flow
-    setTimeout(() => {
+    try {
+      const data = await loginUser({ email, password });
+      if (data && data.token) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
       setSubmitStatus('success');
       
-      // Redirect to home dashboard after visual confirmation
       setTimeout(() => {
+        toast.success(`Welcome back ${data.user.name}`);
         router.push('/');
       }, 1500);
-    }, 1800);
+    } catch (error) {
+      console.error("Login failed:", error);
+      setSubmitStatus('idle');
+    }
   };
 
   return (
@@ -83,7 +92,7 @@ export default function Login() {
               <img 
                 alt="DreamCup Premium Logo" 
                 className={styles.logoImage} 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLJECWQQpFSu1aUK1pMxMktGSKfb7qOJF5XDQyFJS9WNPLqKBLLQT_oiDqYCWDZqZnndyv_GuVjQFf04XEo7-o-4RHUElGRH7I8_G57iwMhdvU4G7LSnhWxrszHJZ_hqPIk3sEGxlb5wtUnRGHzA6h8RtH5deJA9-QOFx7jP_Xc_H1xpTshGhwEjf9mzbZAnycKLXpxGwiYqjAce-XLqL5nDb7U08-eRq87BvN4HpzXXHB5Mvl_8gQHIPW9EgXYI0r04nH7GIEYSQ" 
+                src="/premium_logo.png" 
               />
             </Link>
             <h1 className={styles.title}>
@@ -100,10 +109,10 @@ export default function Login() {
             {/* Email Field */}
             <div className={styles.inputGroup}>
               <label className={styles.label} htmlFor="email">Email Address</label>
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors" style={{ fontSize: 20 }}>
+              <div className={styles.inputWrapper}>
+                <span className={`material-symbols-outlined ${styles.inputIcon}`} style={{ fontSize: 20 }}>
                   mail
                 </span>
-              <div className={styles.inputWrapper}>
                 <input 
                   className={styles.inputField} 
                   id="email" 
@@ -120,10 +129,10 @@ export default function Login() {
             {/* Password Field */}
             <div className={styles.inputGroup}>
               <label className={styles.label} htmlFor="password">Password</label>
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors" style={{ fontSize: 20 }}>
+              <div className={styles.inputWrapper}>
+                <span className={`material-symbols-outlined ${styles.inputIcon}`} style={{ fontSize: 20 }}>
                   lock
                 </span>
-              <div className={styles.inputWrapper}>
                 <input 
                   className={styles.inputFieldWithAction} 
                   id="password" 

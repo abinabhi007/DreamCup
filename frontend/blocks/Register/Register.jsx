@@ -4,13 +4,14 @@ import { useRouter } from 'next/router';
 import styles from './Register.module.scss';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
+import { registerUser } from '../../src/services/authService';
 
 export default function Register() {
   const router = useRouter();
 
   // Form State
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('invalid-email@example'); // Prefilled per prototype demo
+  const [email, setEmail] = useState(''); // Prefilled per prototype demo
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -33,7 +34,7 @@ export default function Register() {
   }, [password]);
 
   // Submit Handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitStatus !== 'idle') return;
     
@@ -44,18 +45,22 @@ export default function Register() {
     }
     if (!isPasswordLengthValid) return;
     if (!agreeTerms) return;
+    if (password !== confirmPassword) return;
 
     setSubmitStatus('loading');
 
-    // Simulate premium account creation
-    setTimeout(() => {
+    try {
+      await registerUser({ name: fullName, email, password });
       setSubmitStatus('success');
       
-      // Redirect to home dashboard after visual confirmation
+      // Redirect to login after visual confirmation
       setTimeout(() => {
-        router.push('/');
+        router.push('/login');
       }, 1500);
-    }, 1800);
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setSubmitStatus('idle');
+    }
   };
 
   return (
@@ -157,7 +162,7 @@ export default function Register() {
                     shield
                   </span>
                   <input 
-                    className={styles.inputField} 
+                    className={confirmPassword.length > 0 && password !== confirmPassword ? styles.inputFieldError : styles.inputField} 
                     id="confirmPassword" 
                     type="password" 
                     placeholder="••••••••"
@@ -167,6 +172,12 @@ export default function Register() {
                     required
                   />
                 </div>
+                {confirmPassword.length > 0 && password !== confirmPassword && (
+                  <p className={styles.errorText}>
+                    <span className={`material-symbols-outlined ${styles.errorIcon}`}>error</span>
+                    Passwords do not match
+                  </p>
+                )}
               </div>
             </div>
 
@@ -200,7 +211,7 @@ export default function Register() {
             <button 
               className={`${styles.submitBtn} ${styles.goldGradient} ${styles.goldGlow}`} 
               type="submit"
-              disabled={submitStatus !== 'idle' || !agreeTerms || !isPasswordLengthValid || (emailTouched && !isEmailValid)}
+              disabled={submitStatus !== 'idle' || !agreeTerms || !isPasswordLengthValid || (emailTouched && !isEmailValid) || password !== confirmPassword}
             >
               {submitStatus === 'idle' && (
                 <>
