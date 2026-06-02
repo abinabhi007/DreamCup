@@ -1,45 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './MyTeamContent.module.scss';
+import { getPlayers } from '../../src/services/playerService';
 
 export default function MyTeamContent() {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [players, setPlayers] = useState([]);
 
   const filters = ['All', 'GK', 'DEF', 'MID', 'FWD'];
 
-  const availablePlayers = [
-    {
-      id: 1,
-      name: "K. Mbappé",
-      position: "FWD",
-      team: "Paris Elites",
-      price: "$14.5M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCiI6MimBE64z03Zq2PnkShXvEAevzheg0CX_sUOuBnFNWC16C8CZJXu8WQ8IfZF1TTG916V6rTUXCr-JMoUExeIjKY7g7UdJMNRUsD80k35YVcRqCv4nvhlXDINIGRWM0Jg6mwkiucV7gAXMDj8FnG5obD5PT6zRyYv2Relb_0tUwotJzL6tHxcFL9MPxro7Rvec0tvFzMtLQ4aacK8ILfyFgfJUgjaLO4pybapBo4x9lCHRpFs6gXvzCL6WrJ04T7Re5VIn5_kCU"
-    },
-    {
-      id: 2,
-      name: "E. Haaland",
-      position: "FWD",
-      team: "Manchester Titans",
-      price: "$15.0M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBuS05NRWss5bpVAAUsU5dJKcAIa7TrXSNkSMrOH0inHn4AsXpRWc8eGaEYgqtqXtcwLBazokhAD0nkUhSeG9_igjIlX6ycghtp498rvoRJlf7YvovCQoL-pdXPMPjeqS-be2UdIeiTTaA69ESF14dMYc5dA1FCOhVXXC3XXfgY3lYQjTdzAH8Bw-A-xVl5ZDSbpK8boQC-oQ5Kw-AhPnwveqWTLY0VQltckoiG2epBohLzCH5o2KFvgAXB1DWDaIvZfnDsdAiWuLA"
-    },
-    {
-      id: 3,
-      name: "T. Courtois",
-      position: "GK",
-      team: "Madrid Elites",
-      price: "$8.5M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAVaGICzN5R8DqTY1vAdir3qAscSyP6OJk3EroRN0o9ZF-9uMDItFbU0hxNNg_sLddcNTNcg4167yGGQO3aBxF4CwfxVPZCmFBRrrkOCAGfurl0teSOMrhDRlB59bV5vEonuhm6zw8tK0qymISCRm3Adkn4LPaj76EUpiG1iF-VoQIO-AZI7jZqveYxQJymIZzvINmGnn39vVmWOCbpjnJ_zsCsF2Sw-tfM887j2vHt2iHayMaEQJLIWz-zkA0-upnW9HvkcUEj24w"
-    },
-    {
-      id: 4,
-      name: "Kevin De B.",
-      position: "MID",
-      team: "Manchester Titans",
-      price: "$12.5M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA6-G0BmeMLikI3Z8_UbzoI-oCYMrYuF5TPOhG5g5sPGfILplX-Qmg1PcRNrOuddBKHHn60L8OCL9nJ23jNK8G7sfYN9-LkDrPls_ExoQCtEqm5V7fwdhXNXo0d7lyivFP1TbVYTM1MhcBq1ncNwZV42TxNjgS7IoRoOF3L1Fj3P02hoTKwx5YSjcDd7u2qRPOz0nKuWPa426LNTZ8kyGjiC3tbuNFdvGaL_k0BttmwrqQplu-QZxfIFGhuu56j2Bif6wwN1bnR_gw"
+  useEffect(() => {
+    async function fetchPlayers() {
+      try {
+        const data = await getPlayers();
+        setPlayers(data.players);
+      } catch (error) {
+        console.error("Failed to fetch players:", error);
+      }
     }
-  ];
+    fetchPlayers();
+  }, []);
+
 
   return (
     <div className={styles.mainLayout}>
@@ -174,8 +154,8 @@ export default function MyTeamContent() {
             </div>
 
             <div className={styles.playerList}>
-              {availablePlayers.map(player => (
-                <div key={player.id} className={styles.playerCard}>
+              {players.map(player => (
+                <div key={player._id} className={styles.playerCard}>
                   <div className={styles.playerInfoWrap}>
                     <div className={styles.playerAvatar}>
                       <img src={player.image} alt={player.name} />
