@@ -11,8 +11,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://dreamcup.vercel.app/",
+      "https://dreamcup.vercel.app",
     ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
