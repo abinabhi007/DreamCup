@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import styles from './ProfileContent.module.scss';
 import { getProfile } from '../../src/services/authService';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 export default function ProfileContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewType, setViewType] = useState('chart'); // 'chart' | 'table'
   const [profileData, setProfileData] = useState(null);
+  const router = useRouter();
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -15,14 +18,25 @@ export default function ProfileContent() {
           const data = await getProfile(token);
           if (data && data.success) {
             setProfileData(data);
+          } else if (data?.success === false) {
+            handleLogout(data?.message || "Session expired");
           }
         } catch (error) {
           console.error("Failed to fetch profile", error);
+          
+          // 3. Handle Axios error responses (e.g., 401 Unauthorized)
+          const errorMessage = error.response?.data?.message || "Session expired. Please log in again.";
+          handleLogout(errorMessage);
         }
       }
     };
+    const handleLogout = (message) => {
+      localStorage.removeItem("token");
+      toast.error(message);
+      router.push("/login");
+    };
     fetchProfile();
-  }, []);
+  }, [router]);
 
 
   const handleEditProfile = () => {
