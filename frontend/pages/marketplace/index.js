@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import MarketplaceContent from '../../blocks/MarketplaceContent/MarketplaceContent';
 import Loader from '../../components/Loader/Loader';
 
 export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // Simulate data fetch delay
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    setLoading(false);
+  }, [router]);
+
 
   return (
     <>

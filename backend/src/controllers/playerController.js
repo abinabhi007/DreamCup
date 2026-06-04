@@ -52,6 +52,180 @@ const getPlayers = async (req, res) => {
   }
 };
 
+const syncPlayers = async (req, res, next) => {
+  try {
+    const apiKey = process.env.FOOTBALL_DATA_API_KEY;
+    if (!apiKey) {
+      return res.status(400).json({
+        success: false,
+        message: "FOOTBALL_DATA_API_KEY environment variable is missing on the server. Please add it to your .env file."
+      });
+    }
+
+    const response = await fetch("https://api.football-data.org/v4/competitions/WC/teams", {
+      headers: { "X-Auth-Token": apiKey }
+    });
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        success: false,
+        message: `Failed to fetch data from football-data.org API: ${response.statusText}`
+      });
+    }
+
+    const data = await response.json();
+    const teams = data.teams;
+    if (!teams || !Array.isArray(teams)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid response structure from football-data.org API."
+      });
+    }
+
+    let importedCount = 0;
+    const positionMapping = {
+      // Goalkeepers
+      "Goalkeeper": "Goalkeeper",
+      // Defenders
+      "Defender": "Defender",
+      "Defence": "Defender",
+      "Centre-Back": "Defender",
+      "Right-Back": "Defender",
+      "Left-Back": "Defender",
+      "Sweeper": "Defender",
+      // Midfielders
+      "Midfielder": "Midfielder",
+      "Midfield": "Midfielder",
+      "Defensive Midfield": "Midfielder",
+      "Central Midfield": "Midfielder",
+      "Attacking Midfield": "Midfielder",
+      "Right Midfield": "Midfielder",
+      "Left Midfield": "Midfielder",
+      // Forwards
+      "Forward": "Forward",
+      "Attacker": "Forward",
+      "Offence": "Forward",
+      "Centre-Forward": "Forward",
+      "Right Winger": "Forward",
+      "Left Winger": "Forward",
+      "Striker": "Forward"
+    };
+
+    const getMappedPosition = (pos) => {
+      if (!pos) return "Midfielder";
+      const mapped = positionMapping[pos];
+      if (mapped) return mapped;
+      
+      const lower = pos.toLowerCase();
+      if (lower.includes("goalkeeper") || lower.includes("keeper")) return "Goalkeeper";
+      if (lower.includes("back") || lower.includes("def") || lower.includes("defence")) return "Defender";
+      if (lower.includes("mid") || lower.includes("center")) return "Midfielder";
+      if (lower.includes("forward") || lower.includes("wing") || lower.includes("strike") || lower.includes("attack")) return "Forward";
+      
+      return "Midfielder";
+    };
+
+    const getDefaultPrice = (pos) => {
+      switch (pos) {
+        case "Forward": return Math.floor(Math.random() * 3) + 10; // 10-12
+        case "Midfielder": return Math.floor(Math.random() * 3) + 8; // 8-10
+        case "Defender": return Math.floor(Math.random() * 3) + 6; // 6-8
+        case "Goalkeeper": return Math.floor(Math.random() * 3) + 5; // 5-7
+        default: return 7;
+      }
+    };
+
+    const playersToSync = [];
+    for (const team of teams) {
+      const teamName = team.name;
+      const teamCrest = team.crest || "";
+      const squad = team.squad || [];
+
+      for (const player of squad) {
+        if (!player.name) continue;
+        playersToSync.push({
+          name: player.name,
+          team: teamName,
+          position: player.position,
+          crest: teamCrest
+        });
+      }
+    }
+
+    console.log(`Syncing ${playersToSync.length} players. Fetching photos from Wikipedia...`);
+
+    const getWikipediaPlayerImage = async (name) => {
+      try {
+        const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(name)}&prop=pageimages&format=json&pithumbsize=250&redirects=1`;
+        const res = await fetch(url, {
+          headers: {
+            "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)"
+          }
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const pages = data.query?.pages;
+        if (!pages) return null;
+        
+        const pageId = Object.keys(pages)[0];
+        if (pageId && pageId !== "-1" && pages[pageId].thumbnail) {
+          return pages[pageId].thumbnail.source;
+        }
+      } catch (error) {
+        // ignore error
+      }
+      return null;
+    };
+
+    const chunkArray = (array, size) => {
+      const chunks = [];
+      for (let i = 0; i < array.length; i += size) {
+        chunks.push(array.slice(i, i + size));
+      }
+      return chunks;
+    };
+
+    const playerChunks = chunkArray(playersToSync, 30);
+    for (const chunk of playerChunks) {
+      await Promise.all(chunk.map(async (player) => {
+        const wikiImage = await getWikipediaPlayerImage(player.name);
+        player.image = wikiImage || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(player.name)}`;
+      }));
+    }
+
+    // Now upsert all players with their real images
+    for (const player of playersToSync) {
+      const mappedPosition = getMappedPosition(player.position);
+      await Player.findOneAndUpdate(
+        { name: player.name, team: player.team },
+        {
+          $setOnInsert: {
+            price: getDefaultPrice(mappedPosition),
+            points: 0
+          },
+          $set: {
+            position: mappedPosition,
+            countryFlag: player.crest,
+            image: player.image
+          }
+        },
+        { upsert: true, new: true }
+      );
+      importedCount++;
+    }
+
+    res.json({
+      success: true,
+      message: `Successfully synchronized ${importedCount} players from ${teams.length} World Cup teams.`,
+      teamsSyncedCount: teams.length,
+      playersSyncedCount: importedCount
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPlayers,
+  syncPlayers,
 };

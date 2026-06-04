@@ -649,3 +649,157 @@
     transform: scale(0.95);
   }
 }
+
+.slotCircleFilled {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(22, 46, 77, 0.9);
+  backdrop-filter: blur(12px);
+  border: 2px solid var(--dc-secondary-fixed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 225, 109, 0.3);
+  }
+}
+
+.slotPlayerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slotPlayerName {
+  font-family: var(--dc-font-label, 'Inter');
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dc-secondary);
+  background: rgba(16, 20, 21, 0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slotPlayerPrice {
+  font-size: 10px;
+  color: var(--dc-secondary-fixed);
+}
+
+.viceCaptainBadge {
+  position: absolute;
+  top: -16px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--dc-primary);
+  color: var(--dc-secondary);
+  font-weight: 900;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(178, 199, 239, 0.2);
+}
+
+// Bench Row
+.benchRow {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(16, 20, 21, 0.6);
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 16px;
+  z-index: 10;
+}
+
+.benchTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dc-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+// Action Menu Popover
+.actionMenuPopover {
+  position: absolute;
+  width: 200px;
+  background: rgba(11, 20, 31, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 999;
+  
+  .menuHeader {
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    color: var(--dc-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    
+    strong {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  button {
+    background: transparent;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--dc-secondary);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+  
+  .menuDeleteBtn {
+    color: #ef4444;
+    &:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+  }
+  
+  .menuCancelBtn {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--dc-on-surface-variant);
+    margin-top: 4px;
+  }
+}
+

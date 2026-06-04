@@ -1,8 +1,89 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './DashboardContent.module.scss';
+import { getTeam } from '../../src/services/teamService';
 
 export default function DashboardContent() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [team, setTeam] = useState(null);
+  const [formation, setFormation] = useState('4-4-2');
+
+  useEffect(() => {
+    fetchTeamData();
+    const savedFormation = localStorage.getItem('dreamcup_formation');
+    if (savedFormation) {
+      setFormation(savedFormation);
+    }
+  }, []);
+
+  const fetchTeamData = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const data = await getTeam(token);
+      if (data && data.team) {
+        setTeam(data.team);
+      }
+    } catch (error) {
+      console.error('Failed to load team data for dashboard:', error);
+    }
+  };
+
+  const draftedPlayers = team?.players || [];
+  const gks = draftedPlayers.filter((p) => p.position === 'Goalkeeper');
+  const defs = draftedPlayers.filter((p) => p.position === 'Defender');
+  const mids = draftedPlayers.filter((p) => p.position === 'Midfielder');
+  const fwds = draftedPlayers.filter((p) => p.position === 'Forward');
+
+  const formationParsed = {
+    '4-4-2': { Goalkeeper: 1, Defender: 4, Midfielder: 4, Forward: 2 },
+    '4-3-3': { Goalkeeper: 1, Defender: 4, Midfielder: 3, Forward: 3 },
+    '3-5-2': { Goalkeeper: 1, Defender: 3, Midfielder: 5, Forward: 2 },
+    '5-3-2': { Goalkeeper: 1, Defender: 5, Midfielder: 3, Forward: 2 },
+  };
+
+  const limits = formationParsed[formation] || formationParsed['4-4-2'];
+
+  const startingGks = gks.slice(0, limits.Goalkeeper);
+  const startingDefs = defs.slice(0, limits.Defender);
+  const startingMids = mids.slice(0, limits.Midfielder);
+  const startingFwds = fwds.slice(0, limits.Forward);
+
+  const renderDashboardPlayer = (player, index, positionLabel) => {
+    if (!player) {
+      return (
+        <div className={styles.playerDotWrap} key={`empty-${positionLabel}-${index}`}>
+          <div className={styles.playerAvatarWrap} style={{ opacity: 0.3, borderStyle: 'dashed', borderWidth: '1px', borderColor: 'rgba(255,255,255,0.2)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 24, color: '#fff' }}>person</span>
+          </div>
+          <div className={styles.playerName}>EMPTY</div>
+          <div className={styles.playerScore}>--</div>
+        </div>
+      );
+    }
+
+    const isCaptain = team?.captain && (team.captain._id === player._id || team.captain === player._id);
+    const isViceCaptain = team?.viceCaptain && (team.viceCaptain._id === player._id || team.viceCaptain === player._id);
+    
+    // Extract last name
+    const lastName = player.name.split(' ').pop().toUpperCase();
+    const nameText = `${lastName}${isCaptain ? ' (C)' : isViceCaptain ? ' (VC)' : ''}`;
+
+    return (
+      <div className={styles.playerDotWrap} key={player._id}>
+        <div className={styles.playerAvatarWrap}>
+          <img
+            className={styles.playerAvatar}
+            alt={player.name}
+            src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
+          />
+        </div>
+        <div className={styles.playerName}>{nameText}</div>
+        <div className={player.points > 0 ? styles.playerScoreGold : styles.playerScore}>
+          {player.points} PTS
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.mainContent}>
@@ -51,43 +132,43 @@ export default function DashboardContent() {
           <div className={styles.statCard}>
             <span className={styles.statLabel}>Total Points</span>
             <div className={styles.statValueRow}>
-              <span className={styles.statValue}>1,240</span>
-              <span className={styles.statTrendPos}>+12%</span>
+              <span className={styles.statValue}>{team ? team.totalPoints : '0'}</span>
+              <span className={styles.statTrendPos}>+0%</span>
             </div>
             <div className={styles.statProgressWrap}>
-              <div className={styles.statProgressBarGold} style={{ width: '70%' }}></div>
+              <div className={styles.statProgressBarGold} style={{ width: '10%' }}></div>
             </div>
           </div>
           
           <div className={styles.statCard}>
             <span className={styles.statLabel}>Global Rank</span>
             <div className={styles.statValueRow}>
-              <span className={styles.statValue}>#4,201</span>
-              <span className={styles.statTrendTop}>Top 5%</span>
+              <span className={styles.statValue}>#9,999</span>
+              <span className={styles.statTrendTop}>Bronze Tier</span>
             </div>
             <div className={styles.statProgressWrap}>
-              <div className={styles.statProgressBarPrimary} style={{ width: '45%' }}></div>
+              <div className={styles.statProgressBarPrimary} style={{ width: '10%' }}></div>
             </div>
           </div>
 
           <div className={styles.statCard}>
             <span className={styles.statLabel}>Team Value</span>
             <div className={styles.statValueRow}>
-              <span className={styles.statValue}>£102.5M</span>
+              <span className={styles.statValue}>£{team ? (100.0 - team.budgetRemaining).toFixed(1) : '0.0'}M</span>
             </div>
             <div className={styles.statProgressWrap}>
-              <div className={styles.statProgressBarTertiary} style={{ width: '90%' }}></div>
+              <div className={styles.statProgressBarTertiary} style={{ width: `${team ? (100.0 - team.budgetRemaining) : 0}%` }}></div>
             </div>
           </div>
 
           <div className={styles.premiumStatCard}>
             <span className={styles.statLabelGold}>
-              <span className="material-symbols-outlined" style={{ fontSize: 12 }}>sync</span> Transfers Left
+              <span className="material-symbols-outlined" style={{ fontSize: 12 }}>account_balance_wallet</span> Budget Left
             </span>
             <div className={styles.statValueRow}>
-              <span className={styles.statValue}>2</span>
+              <span className={styles.statValue}>£{team ? team.budgetRemaining.toFixed(1) : '100.0'}M</span>
             </div>
-            <p className={styles.statNote}>Resets in 2 days, 14 hours</p>
+            <p className={styles.statNote}>Total squad budget limit £100M</p>
           </div>
         </div>
 
@@ -100,7 +181,7 @@ export default function DashboardContent() {
               <h2 className={styles.sectionTitle}>Active Lineup</h2>
               <div className={styles.badgesWrap}>
                 <span className={styles.badgeGrey}>GW 24</span>
-                <span className={styles.badgeBlue}>4-3-3</span>
+                <span className={styles.badgeBlue}>{formation}</span>
               </div>
             </div>
 
@@ -110,102 +191,30 @@ export default function DashboardContent() {
 
               {/* Forward Line */}
               <div className={styles.lineRow}>
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Haaland" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtzBhJeBHJL0WraX2-1joozVzOzk_YCL4GiQQOe1JZyuXg3MjUke6iKzavfeL8RSKJ6VziR5bL32_PavIQZkDrgpQJEVJR_l6CLRJdjCkfIiHgt9TfCSEnIUYXR2kqqHtiKWlyTayrcCP4tcYrITGt_1-cEFMCYg-zl4WqF2ssjZwbNORQiG2JcO8AHuW3LBEDHwjY-uwq1Blc8W9uXrrNKYJAvEMUrrz8N9TpqrJJApoO8bDUPFcqzVreb_H_LxuqAKVoNoY62_g" />
-                  </div>
-                  <div className={styles.playerName}>HAALAND (C)</div>
-                  <div className={styles.playerScoreGold}>12 PTS</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Salah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXQ8JEI1fz0p8xC41xPWKNwU14iTbBIzTg_mGJPBhz3aqri-m7z6i1-ngjZWTOQD0YW-vHsB-nqgHWvfr4AVrQpc5qWr6NfggDDGeSoSYLeIlz_ZIlhdd01z09vCMuFP_CXHyR5WXe9RBbQaDt7Mqv3knOuVnC4-qft2i3xT_USUDQfcNqMtknBP9r7lJsTQU1xyKLUsJ0Seb3oOcLQa5NsmoHcxx1KIIj2XF_g8JuEEB32e2yfpZ0CRhEDw0JKH-e96ak5L6fvnI" />
-                  </div>
-                  <div className={styles.playerName}>SALAH</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Son" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATx-gsJttoXR9snMK-R2CxqhSKVTcCfqnksv-y15P7YbVWk1aZbw7vkSYlUBYdgwLtWVf-En5ec_2m8sDXTvBJS0sP5DCnArYkcrCb_9P0oOo1bg0Y7B5eNeHKsrwHyFX4HTrZXVjHuLNYVNmRJ8J2B-vAosX11vJRiSTO8Mc2zNm3BtoseCtG4oAg7jbOgErCNZ5g9d3aL57Bid0FSKuXZGKy9NlnLF0WwEk6BujOIhbQmDr_4ZHlZHLDrYRHRYkivHFDm3sW4xg" />
-                  </div>
-                  <div className={styles.playerName}>SON</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
+                {Array.from({ length: limits.Forward }).map((_, i) =>
+                  renderDashboardPlayer(startingFwds[i], i, 'FWD')
+                )}
               </div>
 
               {/* Midfield Line */}
               <div className={styles.midfieldRow}>
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Saka" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv6RQ0NbZdliO7OAdli4ToMu8a3bI8AY7YKtQVrWXqv6Y6S50h4sj1KfaxiaZ84UDOxcSfJP7rrNFFbNFHtzXjOi0zNsxoFb4PcRV-Dwrs17t5GpCldaXJsPCfamDU_4VcTpvj5G-lbUPnUdSnG5QefNKumri4b8xbqUMq7p6FmybJFjsDQZujTaPAdYaOKr2plrEKO-t8j9wBMbbaJFh_hsSQeYXkhzu8Hdy9kgvhSNh2ttEm4ZyNMfDwn0UScN-__FxhY9lye5o" />
-                  </div>
-                  <div className={styles.playerName}>SAKA</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="De Bruyne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW4gdyl76gkCoDBa-inlhpSarN1ZYbTOGYxt0kqdfubPXUaAqEYG1fpRc615eRviV3fUs7PbDpijL_vpflIPvrNPwKK-pyHKPdzKl3ZhZhJtVxDSrFR8qqZ4IVB-FQmSbw-TRc8g0Ok6ECDw-blL6K909kJzvQ6AEXRLXXXYJwt3H6aKjGgf8E7q92XG6hvL0S6uHkL_z46MeGlZ3QdEP4dQtSrQqe-RINMtnBxJKIdvSEGS37NWgg8yHRMdpo6RD2A9JS49cc8uY" />
-                  </div>
-                  <div className={styles.playerName}>DE BRUYNE</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Rodri" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6kmkI407gPz_XRsm5tp_8FD1O2zXfYbkDU3DoQDDnKQ1vm-87UuliFghfxfCLBTaTp-v267RFKRKYngo1Oy4YZRZg8HlqG2XbPPmFIh1X5YS_NAtvfkwOJ58GDx6Y0Wy9cHe4_TI3cetYzhUV0Huokb5elapwH9_8ZMDGbx2CyW8yRpe1Ht8r4LfkALkJuOyRepCRbz5Iv_MEVXmo87HogsRUY5EGgh9zXyVfmAz3jtuZqZQGPW5iGvLyXbrggT86xxFOPXnjWBk" />
-                  </div>
-                  <div className={styles.playerName}>RODRI</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
+                {Array.from({ length: limits.Midfielder }).map((_, i) =>
+                  renderDashboardPlayer(startingMids[i], i, 'MID')
+                )}
               </div>
 
               {/* Defense Line */}
               <div className={styles.defenseRow}>
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="White" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBist7tjiKSyOZQeY1BL3FdQdAjVjR0IHDaW52Lc26q5x1MZV2Qa4RQysOcTbBM3RuUxYe0eVNcurE_ancRNsIuT_7Q6RVXMXJ6dKc3idnI0d0hucv33VKE3v7Ed4k3-_WT9xDloPBGMxaFJzIUIp-OqB67MHb_CoG0cy6xyP6rGpUzZ_t3DQRQlVFRUQuPiZMCs9LO0w7OAQD8eFjNMyTTCC6bpsFDhZCV5u-Tz1qFsx3BF_HvbPQQWDDP-YajGfYnrgon27L_kg0" />
-                  </div>
-                  <div className={styles.playerName}>WHITE</div>
-                  <div className={styles.playerScoreGold}>6 PTS</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Van Dijk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAToAEmEuoStZyoaUesiIvJnH-9SZt1nBnQ62-M3fd0_NvOW3Xf2GCjw5aFACE7AkkzkLbZLMVZP6At4i6hbMib9DUYJsZB2k7YhsxSBWb3Bt0pn8K4Bo1C2VVTYXHjikob7qKP3vsTH_mLRNJIGteL-IC6KGduoxiLa8zU7YfcEK8yi2Nr6GLFODRNaWLSpY0OeCO4Mrot_SB_YdKR0ZNivLK_Asfsyhy72RMwnhs9eUyh51WIr2FbsgXUrWHmiq-5RkvnCxnPheU" />
-                  </div>
-                  <div className={styles.playerName}>VAN DIJK</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Saliba" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgUM95l1iRtqeSSa4BE44NKhly_i0qYSjcX3cJOVViNyQxCTO7_emZn820EWL9U9RBRD1sW-jej6J2YjAPvcXZ8pPMdGRLX97rnn0asimTfFg2fBNbCbA8pk8y9G5yNJBQP22wzRZcjCaBpyzf2kgChri1MT_lZOBDVquDZJTdKQduwjRNxMP3kwD7jbUjD37NbpaiIn5RPAUAiXZbpsHPwi3-rXmkb0zPko9U8lOPC-3vDzVtAxwc9-4rnr-XTcMwoIadTQ_P6ew" />
-                  </div>
-                  <div className={styles.playerName}>SALIBA</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
-
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Porro" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5fDGh27VFo4gG2BnOR2UPrNM9m2r_STY9iO97nE2QrRX6woEgjzqP1Hw6lXjYSv2JfrJ5VYdoujNctZxakTwtEpVoiqLGXlctA-EVc0H8RGX5hRiMF5XS8t8vJqOdenAoMkUGVxisqwOGUX9p5Ky8yKdg25E5EweAq2joiF2YHv_dgiTK4VeU1x5f7cv3N8npA5vkMt9Xt_EUuU7G7y_82hArYmrwF8hjhkTqj8bgxpnCFFGMAoK_ZoSIIDBEfBwuNqKKuAKRDuA" />
-                  </div>
-                  <div className={styles.playerName}>PORRO</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
+                {Array.from({ length: limits.Defender }).map((_, i) =>
+                  renderDashboardPlayer(startingDefs[i], i, 'DEF')
+                )}
               </div>
 
               {/* Goalie Line */}
               <div className={styles.goalieRow}>
-                <div className={styles.playerDotWrap}>
-                  <div className={styles.playerAvatarWrap}>
-                    <img className={styles.playerAvatar} alt="Raya" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEC5ETH2uav47RRyv5jCUo8e2a8s_ZcvPxkWGIvjUHvYIpHhMyIfRNZ47uRwDBzLIm1TNeOj3DdmLls44_FWjyuOCUQ8OVt49AnL_gABvcuKl3NamebDJSEHu8iGT7BkSL-OIs8w2gtAB7qB29-G81CvuZG2N_RrrW9APV4na22vQMg-SHJGqIDS07QBrfYYDyP-rUhvVOyQ4zOXCaG3J5UroLok1ql4VR4P6DDx7t3qHBG65Ej5naqJrXXsIdqkojOGTTNwz6ElU" />
-                  </div>
-                  <div className={styles.playerName}>RAYA</div>
-                  <div className={styles.playerScore}>--</div>
-                </div>
+                {Array.from({ length: limits.Goalkeeper }).map((_, i) =>
+                  renderDashboardPlayer(startingGks[i], i, 'GK')
+                )}
               </div>
 
             </div>

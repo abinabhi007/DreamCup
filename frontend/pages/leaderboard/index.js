@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import LeaderboardContent from '../../blocks/LeaderboardContent/LeaderboardContent';
 import Loader from '../../components/Loader/Loader';
 
 export default function LeaderboardPage() {
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // Simulate premium leaderboard data fetch
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    setLoading(false);
+  }, [router]);
+
 
   return (
     <>
