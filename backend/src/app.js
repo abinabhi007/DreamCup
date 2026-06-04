@@ -45,7 +45,10 @@ app.use(
       }
 
       // Reject other origins
-      return callback(new Error("Not allowed by CORS"));
+      console.warn(`CORS blocked origin: ${origin}`);
+      const corsError = new Error(`Origin ${origin} not allowed by CORS`);
+      corsError.status = 403;
+      return callback(corsError);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
@@ -60,6 +63,19 @@ app.use("/api/team", teamRoutes);
 app.get("/", (req, res) => {
   res.json({
     message: "DreamCup API Running 🚀",
+  });
+});
+
+// Global Error Handler Middleware
+app.use((err, req, res, next) => {
+  console.error("Unhandled Server Error:", err);
+  
+  const statusCode = err.status || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    // Only return stack trace in development
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 });
 
