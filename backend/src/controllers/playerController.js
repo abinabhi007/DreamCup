@@ -154,26 +154,77 @@ const syncPlayers = async (req, res, next) => {
 
     console.log(`Syncing ${playersToSync.length} players. Fetching photos from Wikipedia...`);
 
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
     const getWikipediaPlayerImage = async (name) => {
-      try {
-        const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(name)}&prop=pageimages&format=json&pithumbsize=250&redirects=1`;
-        const res = await fetch(url, {
-          headers: {
-            "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)"
+      const fetchImage = async (title) => {
+        try {
+          const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=250&redirects=1`;
+          let res = await fetch(url, {
+            headers: { "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)" }
+          });
+          if (res.status === 429) {
+            await delay(1000);
+            res = await fetch(url, {
+              headers: { "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)" }
+            });
           }
-        });
-        if (!res.ok) return null;
-        const data = await res.json();
-        const pages = data.query?.pages;
-        if (!pages) return null;
-        
-        const pageId = Object.keys(pages)[0];
-        if (pageId && pageId !== "-1" && pages[pageId].thumbnail) {
-          return pages[pageId].thumbnail.source;
-        }
-      } catch (error) {
-        // ignore error
+          if (!res.ok) return null;
+          const text = await res.text();
+          if (text.includes("too many requests")) {
+            await delay(1500);
+            return null;
+          }
+          const data = JSON.parse(text);
+          const pages = data.query?.pages;
+          if (!pages) return null;
+          const pageId = Object.keys(pages)[0];
+          if (pageId && pageId !== "-1") {
+            return {
+              found: true,
+              image: pages[pageId].thumbnail?.source || null
+            };
+          }
+        } catch (e) {}
+        return null;
+      };
+
+      // 1. Try direct matching
+      const directResult = await fetchImage(name);
+      if (directResult) {
+        if (directResult.image) return directResult.image;
+        return null; // Page exists but no image
       }
+
+      // 2. Try search fallback (if page not found)
+      try {
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name + " footballer")}&format=json&utf8=1`;
+        let res = await fetch(searchUrl, {
+          headers: { "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)" }
+        });
+        if (res.status === 429) {
+          await delay(1000);
+          res = await fetch(searchUrl, {
+            headers: { "User-Agent": "DreamCupFantasySports/1.0 (abinhn62@gmail.com)" }
+          });
+        }
+        if (!res.ok) return null;
+        const text = await res.text();
+        if (text.includes("too many requests")) {
+          await delay(1500);
+          return null;
+        }
+        const data = JSON.parse(text);
+        const results = data.query?.search;
+        if (results && results.length > 0) {
+          const topTitle = results[0].title;
+          const searchResult = await fetchImage(topTitle);
+          if (searchResult && searchResult.image) {
+            return searchResult.image;
+          }
+        }
+      } catch (e) {}
+
       return null;
     };
 
@@ -185,12 +236,13 @@ const syncPlayers = async (req, res, next) => {
       return chunks;
     };
 
-    const playerChunks = chunkArray(playersToSync, 30);
+    const playerChunks = chunkArray(playersToSync, 20);
     for (const chunk of playerChunks) {
       await Promise.all(chunk.map(async (player) => {
         const wikiImage = await getWikipediaPlayerImage(player.name);
         player.image = wikiImage || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(player.name)}`;
       }));
+      await delay(200); // Respect Wikipedia API rate limit
     }
 
     // Now upsert all players with their real images
