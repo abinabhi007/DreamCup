@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
       
       <div className={styles.copyright}>
-        © 2026 DreamCup Elite Performance Fantasy. All rights reserved by <Link href="https://abinhn.vercel.app" target='_blank'> ABIN</Link>
+        © 2026 DreamCup Elite Performance Fantasy. All rights reserved by <Link href="https://abinhn.vercel.app" target='_blank' style={{color:"#ffe16d",textDecoration:"none"}}> Abin HN</Link>
       </div>
     </footer>
   );
