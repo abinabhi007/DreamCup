@@ -1,25 +1,51 @@
+import { useState, useEffect } from 'react';
 import styles from './ElitePlayerPool.module.scss';
-
-const LEADERBOARD = [
-  {
-    rank: '01',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdyaqpfqOhMncbLvsEyFiAlhPtd4iYTCWWiaMEkjyOsT4VujBv0jNrBIKupvo68wAnTojjAzYaBnjSr1on1kpc-mcDm3clvaW-Cln6zNStwk7UK_-LJu_JLbm5our8Nvmg4eAxlJ4chg9u9fQjB9dGLIJZK-uZ5LCFgiH7nqHT-GuvqpSL84gdsufCH0q2B_nCQbrG_vSxOkKeddwInyDBDPa0KvzKgCuh36iwdwIRTCjByUy749uUfFrJM6Zo1BeixHiVO3IcIls',
-    name: 'EliteStriker99',
-    meta: '4 Teams · UK',
-    pts: '3,450 pts',
-    isTop: true,
-  },
-  {
-    rank: '02',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCaBnzJ9qSAnelbF8T_dTV5IJeNMBuU9mvO0l3bZWT9hSjWQQk0nc8G5PSGHh7T43HsQW1v2-BvHQCu2qkEswYULL_XEIX-Pq_poCRmitoAagqagu9jdZmKD7dRdyow84j7bHa1u5ZurlyGinHw-hlVkHn7ECdUy0TUkxJGej4ns_daJZ5Ay-8fq1D__DfGDT7ne3pedpLH98mMDqmBKmiteFYqxJavt76gOHxluwduMlOMbk9IHr_vqao4uGFQfGSjHSTl0Qi6EFw',
-    name: 'PitchMaster_X',
-    meta: '2 Teams · Brazil',
-    pts: '3,212 pts',
-    isTop: false,
-  },
-];
+import { getLeaderboard } from '../../src/services/leaderboardService';
 
 export default function ElitePlayerPool() {
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    getLeaderboard()
+      .then((data) => {
+        if (active && data.success) {
+          setLeaderboard(data.leaderboard || []);
+        }
+      })
+      .catch((err) => console.error("Error loading elite player pool leaderboard:", err))
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const getAvatar = (user, defaultAvatar) => {
+    if (user?.avatar && user.avatar.startsWith('http')) {
+      return user.avatar;
+    }
+    return defaultAvatar;
+  };
+
+  const defaultAvatars = [
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuCdyaqpfqOhMncbLvsEyFiAlhPtd4iYTCWWiaMEkjyOsT4VujBv0jNrBIKupvo68wAnTojjAzYaBnjSr1on1kpc-mcDm3clvaW-Cln6zNStwk7UK_-LJu_JLbm5our8Nvmg4eAxlJ4chg9u9fQjB9dGLIJZK-uZ5LCFgiH7nqHT-GuvqpSL84gdsufCH0q2B_nCQbrG_vSxOkKeddwInyDBDPa0KvzKgCuh36iwdwIRTCjByUy749uUfFrJM6Zo1BeixHiVO3IcIls',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuCaBnzJ9qSAnelbF8T_dTV5IJeNMBuU9mvO0l3bZWT9hSjWQQk0nc8G5PSGHh7T43HsQW1v2-BvHQCu2qkEswYULL_XEIX-Pq_poCRmitoAagqagu9jdZmKD7dRdyow84j7bHa1u5ZurlyGinHw-hlVkHn7ECdUy0TUkxJGej4ns_daJZ5Ay-8fq1D__DfGDT7ne3pedpLH98mMDqmBKmiteFYqxJavt76gOHxluwduMlOMbk9IHr_vqao4uGFQfGSjHSTl0Qi6EFw'
+  ];
+
+  const topManagers = leaderboard.slice(0, 2).map((item, index) => {
+    return {
+      rank: index === 0 ? '01' : '02',
+      avatar: getAvatar(item.userId, defaultAvatars[index] || defaultAvatars[0]),
+      name: item.userId?.name || 'Unknown Manager',
+      meta: `Fantasy Squad`,
+      pts: `${item.totalPoints !== undefined ? item.totalPoints.toLocaleString() : '0'} pts`,
+      isTop: index === 0,
+    };
+  });
+
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
@@ -100,19 +126,25 @@ export default function ElitePlayerPool() {
             <div className={`${styles.leaderboard} glass-panel`}>
               <h3 className={styles.lbTitle}>Top Fantasy Managers</h3>
               <div className={styles.lbList}>
-                {LEADERBOARD.map((item) => (
-                  <div key={item.rank} className={styles.lbRow}>
-                    <div className={styles.lbLeft}>
-                      <span className={`${styles.lbRank}${item.isTop ? ' ' + styles.lbRankTop : ''}`}>{item.rank}</span>
-                      <img src={item.avatar} alt={item.name} className={styles.lbAvatar} />
-                      <div>
-                        <p className={styles.lbName}>{item.name}</p>
-                        <p className={styles.lbMeta}>{item.meta}</p>
+                {loading ? (
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', margin: '12px 0' }}>Loading rankings...</p>
+                ) : topManagers.length === 0 ? (
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '14px', margin: '12px 0' }}>No managers ranked yet</p>
+                ) : (
+                  topManagers.map((item) => (
+                    <div key={item.rank} className={styles.lbRow}>
+                      <div className={styles.lbLeft}>
+                        <span className={`${styles.lbRank}${item.isTop ? ' ' + styles.lbRankTop : ''}`}>{item.rank}</span>
+                        <img src={item.avatar} alt={item.name} className={styles.lbAvatar} />
+                        <div>
+                          <p className={styles.lbName}>{item.name}</p>
+                          <p className={styles.lbMeta}>{item.meta}</p>
+                        </div>
                       </div>
+                      <span className={styles.lbPts}>{item.pts}</span>
                     </div>
-                    <span className={styles.lbPts}>{item.pts}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

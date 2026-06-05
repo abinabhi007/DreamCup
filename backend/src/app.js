@@ -4,6 +4,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const playerRoutes = require("./routes/playerRoutes");
 const teamRoutes = require("./routes/teamRoutes");
+const leaderboardRoutes = require("./routes/leaderboardRoutes");
+const matchRoutes = require("./routes/matchRoutes");
 
 const app = express();
 
@@ -59,6 +61,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/team", teamRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
+app.use("/api/matches", matchRoutes);
 
 app.get("/", (req, res) => {
   res.json({
