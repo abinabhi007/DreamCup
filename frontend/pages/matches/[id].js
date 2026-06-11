@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import Loader from '../../components/Loader/Loader';
 import { getMatchById } from '../../src/services/matchService';
+import { getPlayersForMatch } from '../../src/services/teamService';
 
 export default function MatchDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [matchData, setMatchData] = useState(null);
+  const [fantasyPlayers, setFantasyPlayers] = useState([]);
   const [error, setError] = useState(null);
   const router = useRouter();
   const { id } = router.query;
@@ -34,6 +36,18 @@ export default function MatchDetailsPage() {
         setMatchData(data.match);
       } else {
         setError('Match not found');
+      }
+
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const playersData = await getPlayersForMatch(id, token);
+          if (playersData && playersData.success) {
+            setFantasyPlayers(playersData.players || []);
+          }
+        } catch (teamErr) {
+          console.error("Could not fetch fantasy players for match:", teamErr);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -117,6 +131,23 @@ export default function MatchDetailsPage() {
                   <div><strong>Venue:</strong> {matchData.venue || 'TBD'}</div>
                 </div>
               </div>
+
+              {fantasyPlayers.length > 0 && (
+                <div style={{ marginTop: '48px', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '48px' }}>
+                  <h3 style={{ color: '#fff', fontSize: '20px', marginBottom: '24px' }}>Your Fantasy Players in this Match</h3>
+                  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                    {fantasyPlayers.map(player => (
+                      <div key={player._id} style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', width: '280px' }}>
+                        <img src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} alt={player.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
+                        <div>
+                          <div style={{ color: '#fff', fontWeight: 'bold' }}>{player.name}</div>
+                          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', marginTop: '4px' }}>{player.position} • {player.team}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
             </div>
           ) : (

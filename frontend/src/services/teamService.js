@@ -63,3 +63,13 @@ export const setViceCaptain = async (playerId, token) => {
   );
   return response.data;
 };
+
+export const getPlayersForMatch = async (matchId, token) => {
+  const response = await axios.get(
+    `${API_URL}/api/team/match/${matchId}`,
+    {
+      headers: getHeaders(token),
+    }
+  );
+  return response.data;
+};

@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const FantasyTeam = require("../models/FantasyTeam");
 const Player = require("../models/Player");
 
@@ -345,6 +347,65 @@ const setViceCaptain = async (req, res) => {
   }
 };
 
+const getPlayersForMatch = async (req, res) => {
+  try {
+    const { matchId } = req.params;
+
+    // Get match details
+    const matchResponse = await axios.get(
+      `https://api.football-data.org/v4/matches/${matchId}`,
+      {
+        headers: {
+          "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
+        },
+      }
+    );
+
+    const homeTeam =
+      matchResponse.data.homeTeam.name;
+
+    const awayTeam =
+      matchResponse.data.awayTeam.name;
+
+    // Get user's fantasy team
+    const fantasyTeam = await FantasyTeam.findOne({
+      userId: req.user.id,
+    })
+      .populate("players")
+      .populate("captain")
+      .populate("viceCaptain");
+
+    if (!fantasyTeam) {
+      return res.status(404).json({
+        success: false,
+        message: "Fantasy team not found",
+      });
+    }
+
+    // Filter players belonging to either team
+    const matchPlayers = fantasyTeam.players.filter(
+      (player) =>
+        player.team === homeTeam ||
+        player.team === awayTeam
+    );
+
+    res.json({
+      success: true,
+      homeTeam,
+      awayTeam,
+      captain: fantasyTeam.captain,
+      viceCaptain: fantasyTeam.viceCaptain,
+      players: matchPlayers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 
 module.exports = {
   createTeam,
@@ -352,5 +413,6 @@ module.exports = {
   getTeam,
   removePlayer,
   setCaptain,
-  setViceCaptain
+  setViceCaptain,
+  getPlayersForMatch
 };
