@@ -4,12 +4,15 @@ import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import MatchesContent from '../../blocks/MatchesContent/MatchesContent';
 import Loader from '../../components/Loader/Loader';
-import { getMatches, getLiveMatches } from '../../src/services/matchService';
+import { getMatches, getLiveMatches, getFinishedMatches, getStandings, getTopGoalScorers } from '../../src/services/matchService';
 
 export default function MatchesPage() {
   const [loading, setLoading] = useState(true);
   const [matches, setMatches] = useState([]);
   const [liveMatches, setLiveMatches] = useState([]);
+  const [finishedMatches, setFinishedMatches] = useState([]);
+  const [standings, setStandings] = useState([]);
+  const [topScorers, setTopScorers] = useState([]);
   const [matchesLoading, setMatchesLoading] = useState(true);
   const [matchesError, setMatchesError] = useState(null);
   const router = useRouter();
@@ -30,12 +33,18 @@ export default function MatchesPage() {
   const fetchMatches = async () => {
     try {
       setMatchesLoading(true);
-      const [allMatchesData, liveMatchesData] = await Promise.all([
+      const [allMatchesData, liveMatchesData, finishedMatchesData, standingsData, topScorersData] = await Promise.all([
         getMatches(),
-        getLiveMatches()
+        getLiveMatches(),
+        getFinishedMatches(),
+        getStandings(),
+        getTopGoalScorers()
       ]);
       setMatches(allMatchesData.matches || []);
       setLiveMatches(liveMatchesData.matches || []);
+      setFinishedMatches(finishedMatchesData.matches || []);
+      setStandings(standingsData.standings || []);
+      setTopScorers(topScorersData.scorers || []);
       setMatchesError(null);
     } catch (error) {
       console.log(error);
@@ -65,7 +74,15 @@ export default function MatchesPage() {
           <SideNav />
 
           {/*Main Matches Content*/}
-          <MatchesContent matches={matches} liveMatches={liveMatches} loading={matchesLoading} error={matchesError} />
+          <MatchesContent 
+            matches={matches} 
+            liveMatches={liveMatches} 
+            finishedMatches={finishedMatches}
+            standings={standings}
+            topScorers={topScorers}
+            loading={matchesLoading} 
+            error={matchesError} 
+          />
         </div>
       )}
     </>

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import styles from './MatchesContent.module.scss';
+import { getMatchById } from '../../src/services/matchService';
 
-export default function MatchesContent({ matches = [], liveMatches: liveMatchesProp = [], loading = false, error = null }) {
+export default function MatchesContent({ matches = [], liveMatches: liveMatchesProp = [], finishedMatches = [], standings = [], topScorers = [], loading = false, error = null }) {
   const [activeTab, setActiveTab] = useState('UPCOMING MATCHES');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMatch, setSelectedMatch] = useState(null);
+  const [detailedMatch, setDetailedMatch] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const formatMatchTime = (utcString) => {
@@ -114,13 +117,16 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
   // Filter valid matches with teams defined
   const validMatches = matches.filter(m => m.homeTeam && m.awayTeam);
   const validLiveMatches = liveMatchesProp.filter(m => m.homeTeam && m.awayTeam);
+  const validFinishedMatches = finishedMatches.filter(m => m.homeTeam && m.awayTeam);
 
   const liveMatches = validLiveMatches.length > 0 
     ? validLiveMatches 
     : validMatches.filter(m => ['LIVE', 'IN_PLAY', 'PAUSED', 'HT'].includes(m.status));
 
   const upcomingMatches = validMatches.filter(m => ['SCHEDULED', 'TIMED', 'CALENDAR'].includes(m.status));
-  const completedMatches = validMatches.filter(m => ['FINISHED', 'AWARDED', 'POSTPONED', 'CANCELLED', 'SUSPENDED'].includes(m.status));
+  const completedMatches = validFinishedMatches.length > 0 
+    ? validFinishedMatches 
+    : validMatches.filter(m => ['FINISHED', 'AWARDED', 'POSTPONED', 'CANCELLED', 'SUSPENDED'].includes(m.status));
 
   const getTabMatches = () => {
     if (activeTab === 'LIVE MATCHES') {
@@ -129,7 +135,10 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
     if (activeTab === 'UPCOMING MATCHES') {
       return upcomingMatches;
     }
-    return completedMatches;
+    if (activeTab === 'COMPLETED MATCHES') {
+      return completedMatches;
+    }
+    return [];
   };
 
   const currentMatches = getTabMatches();
@@ -207,15 +216,36 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
 
   // Sync selectedMatch to filtered list changes
   useEffect(() => {
-    if (filteredMatches.length > 0) {
+    if (activeTab !== 'STANDINGS' && filteredMatches.length > 0) {
       const exists = filteredMatches.some(m => m.id === selectedMatch?.id);
       if (!exists) {
         setSelectedMatch(filteredMatches[0]);
       }
-    } else {
+    } else if (activeTab !== 'STANDINGS') {
       setSelectedMatch(null);
     }
-  }, [filteredMatches, selectedMatch]);
+  }, [filteredMatches, selectedMatch, activeTab]);
+
+  useEffect(() => {
+    const fetchDetailedMatch = async () => {
+      if (selectedMatch) {
+        try {
+          setDetailsLoading(true);
+          const data = await getMatchById(selectedMatch.id || selectedMatch._id);
+          if (data && data.match) {
+            setDetailedMatch(data.match);
+          }
+        } catch (error) {
+          console.error("Failed to fetch match details", error);
+        } finally {
+          setDetailsLoading(false);
+        }
+      } else {
+        setDetailedMatch(null);
+      }
+    };
+    fetchDetailedMatch();
+  }, [selectedMatch]);
 
   const matchProb = selectedMatch ? getMatchProbability(selectedMatch.id) : { homeProb: 40, drawProb: 20, awayProb: 40 };
   const matchStats = selectedMatch ? getMatchStats(selectedMatch.id) : { homePossession: 50, awayPossession: 50, homeShots: 5, awayShots: 5 };
@@ -223,7 +253,9 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
   const tabs = [
     { key: 'LIVE MATCHES', label: `LIVE MATCHES (${liveMatches.length})` },
     { key: 'UPCOMING MATCHES', label: 'UPCOMING MATCHES' },
-    { key: 'COMPLETED MATCHES', label: 'COMPLETED MATCHES' }
+    { key: 'COMPLETED MATCHES', label: 'COMPLETED MATCHES' },
+    { key: 'STANDINGS', label: 'STANDINGS' },
+    { key: 'TOP SCORERS', label: 'TOP SCORERS' }
   ];
 
   return (
@@ -441,6 +473,94 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                 </>
               )}
             </div>
+            
+            {activeTab === 'STANDINGS' && (
+              <div className={styles.standingsContainer}>
+                {standings.length === 0 ? (
+                  <div className={styles.emptyState}>
+                    <p>No standings available.</p>
+                  </div>
+                ) : (
+                  standings.map((group) => (
+                    <div key={group.group} className={styles.groupTableWrap}>
+                      <h3 className={styles.groupTitle}>{group.group.replace('_', ' ')}</h3>
+                      <table className={styles.standingsTable}>
+                        <thead>
+                          <tr>
+                            <th>Pos</th>
+                            <th>Team</th>
+                            <th>P</th>
+                            <th>W</th>
+                            <th>D</th>
+                            <th>L</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {group.table.map((team) => (
+                            <tr key={team.team}>
+                              <td>{team.position}</td>
+                              <td className={styles.teamCol}>
+                                <img src={team.flag} alt={team.team} className={styles.teamLogoMicro} />
+                                {team.team}
+                              </td>
+                              <td>{team.playedGames}</td>
+                              <td>{team.won}</td>
+                              <td>{team.draw}</td>
+                              <td>{team.lost}</td>
+                              <td>{team.goalDifference}</td>
+                              <td className={styles.pointsCol}>{team.points}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+
+            {activeTab === 'TOP SCORERS' && (
+              <div className={styles.standingsContainer}>
+                {topScorers.length === 0 ? (
+                  <div className={styles.emptyState}>
+                    <p>No top scorers available.</p>
+                  </div>
+                ) : (
+                  <div className={styles.groupTableWrap}>
+                    <h3 className={styles.groupTitle}>World Cup Top Goal Scorers</h3>
+                    <table className={styles.standingsTable}>
+                      <thead>
+                        <tr>
+                          <th>Rank</th>
+                          <th>Player</th>
+                          <th>Team</th>
+                          <th>Goals</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {topScorers.map((scorer, index) => (
+                          <tr key={scorer.player || index}>
+                            <td>
+                              <span style={{ color: index === 0 ? '#e9c400' : 'inherit', fontWeight: index === 0 ? 800 : 'inherit' }}>
+                                {index + 1}
+                              </span>
+                            </td>
+                            <td className={styles.teamCol}>
+                              <span className="material-symbols-outlined" style={{ opacity: 0.5 }}>person</span>
+                              {scorer.player}
+                            </td>
+                            <td>{scorer.team}</td>
+                            <td className={styles.pointsCol}>{scorer.goals}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Selected Match Detail Panel */}
@@ -469,6 +589,12 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                       <p className={styles.scoreTime}>
                         {selectedMatch.status === 'FINISHED' ? 'FINISHED' : ['LIVE', 'IN_PLAY', 'PAUSED', 'HT'].includes(selectedMatch.status) ? 'IN PLAY' : `KICKOFF ${formatMatchTime(selectedMatch.date)}`}
                       </p>
+                      {detailedMatch?.venue && (
+                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>{detailedMatch.venue}</p>
+                      )}
+                      {detailedMatch?.score?.halfTime && (
+                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>HT: {detailedMatch.score.halfTime.home} - {detailedMatch.score.halfTime.away}</p>
+                      )}
                     </div>
                     <div className={styles.scoreTeam}>
                       <p className={styles.scoreTeamAbbr}>{getAbbreviation(selectedMatch.awayTeam)}</p>

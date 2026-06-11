@@ -887,4 +887,72 @@
   user-select: none;
 }
 
+// Standings specific
+.standingsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
 
+.groupTableWrap {
+  background: rgba(22, 46, 77, 0.7);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.groupTitle {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 16px 0;
+  text-transform: capitalize;
+}
+
+.standingsTable {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    text-align: left;
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: var(--dc-on-surface-variant);
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    text-transform: uppercase;
+  }
+
+  td {
+    padding: 12px 0;
+    font-size: 14px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.teamCol {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.teamLogoMicro {
+  width: 24px;
+  height: 24px;
+}
+
+.pointsCol {
+  color: #e9c400 !important;
+  font-weight: 800;
+}

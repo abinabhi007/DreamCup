@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import styles from './DashboardContent.module.scss';
 import { getTeam } from '../../src/services/teamService';
+import { getMatches } from '../../src/services/matchService';
 
 export default function DashboardContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [team, setTeam] = useState(null);
   const [formation, setFormation] = useState('4-4-2');
+  const [upcomingFixtures, setUpcomingFixtures] = useState([]);
 
   useEffect(() => {
     fetchTeamData();
+    fetchUpcomingFixtures();
     const savedFormation = localStorage.getItem('dreamcup_formation');
     if (savedFormation) {
       setFormation(savedFormation);
@@ -28,7 +31,44 @@ export default function DashboardContent() {
     }
   };
 
+  const fetchUpcomingFixtures = async () => {
+    try {
+      const data = await getMatches();
+      if (data && data.matches) {
+        const upcoming = data.matches
+          .filter(m => ['SCHEDULED', 'TIMED', 'CALENDAR'].includes(m.status) && m.homeTeam && m.awayTeam)
+          .slice(0, 3);
+        setUpcomingFixtures(upcoming);
+      }
+    } catch (error) {
+      console.error('Failed to load upcoming fixtures:', error);
+    }
+  };
+
+  const formatMatchTime = (utcString) => {
+    if (!utcString) return '';
+    const dateObj = new Date(utcString);
+    return dateObj.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  };
+
+  const getAbbreviation = (name) => {
+    if (!name) return 'UNK';
+    const clean = name.trim().toUpperCase();
+    if (clean.length <= 3) return clean;
+    const parts = clean.split(/[\s-]+/);
+    if (parts.length > 1) {
+      return (parts[0][0] + parts[1][0] + (parts[2] ? parts[2][0] : parts[1][1])).slice(0, 3);
+    }
+    return clean.slice(0, 3);
+  };
+
   const draftedPlayers = team?.players || [];
+  
+  // Calculate top fantasy players from drafted players
+  const topFantasyPlayers = [...draftedPlayers]
+    .sort((a, b) => (b.points || 0) - (a.points || 0))
+    .slice(0, 3);
+
   const gks = draftedPlayers.filter((p) => p.position === 'Goalkeeper');
   const defs = draftedPlayers.filter((p) => p.position === 'Defender');
   const mids = draftedPlayers.filter((p) => p.position === 'Midfielder');
@@ -224,7 +264,7 @@ export default function DashboardContent() {
           <div className={styles.sideCol}>
             
             {/* Points History Chart */}
-            <div className={styles.glassPanelBase}>
+            {/* <div className={styles.glassPanelBase}>
               <div className={styles.panelTitleRow}>
                 <h3 className={styles.panelTitle}>Performance Trend</h3>
                 <button className={styles.panelFilterBtn}>GW 20-24</button>
@@ -255,99 +295,69 @@ export default function DashboardContent() {
                 <span>GW 23</span>
                 <span>GW 24</span>
               </div>
-            </div>
+            </div> */}
 
             {/* Upcoming Matches */}
             <div className={styles.glassPanelBase}>
               <h3 className={styles.panelTitle}>Upcoming Fixtures</h3>
               <div className={styles.fixtureList}>
-                <div className={styles.fixtureCard}>
-                  <div className={styles.fixtureInfoWrap}>
-                    <div className={styles.teamsBadgeStack}>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#dc2626' }}>ARS</div>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#1d4ed8' }}>LIV</div>
-                    </div>
-                    <div>
-                      <p className={styles.fixtureMatchName}>ARS vs LIV</p>
-                      <p className={styles.fixtureTime}>Tomorrow, 17:30</p>
-                    </div>
-                  </div>
-                  <div className={styles.fixtureHighlight}>X2 MULTI</div>
-                </div>
-
-                <div className={styles.fixtureCard}>
-                  <div className={styles.fixtureInfoWrap}>
-                    <div className={styles.teamsBadgeStack}>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#0ea5e9' }}>MCI</div>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#ffffff', color: '#000' }}>TOT</div>
-                    </div>
-                    <div>
-                      <p className={styles.fixtureMatchName}>MCI vs TOT</p>
-                      <p className={styles.fixtureTime}>Sun, 14:00</p>
-                    </div>
-                  </div>
-                  <span className={`material-symbols-outlined ${styles.chevronIcon}`}>chevron_right</span>
-                </div>
-
-                <div className={styles.fixtureCard}>
-                  <div className={styles.fixtureInfoWrap}>
-                    <div className={styles.teamsBadgeStack}>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#991b1b' }}>MUN</div>
-                      <div className={styles.teamBadge} style={{ backgroundColor: '#1e3a8a' }}>CHE</div>
-                    </div>
-                    <div>
-                      <p className={styles.fixtureMatchName}>MUN vs CHE</p>
-                      <p className={styles.fixtureTime}>Sun, 16:30</p>
-                    </div>
-                  </div>
-                  <span className={`material-symbols-outlined ${styles.chevronIcon}`}>chevron_right</span>
-                </div>
+                {upcomingFixtures.length > 0 ? (
+                  upcomingFixtures.map((match, index) => {
+                    const homeAbbr = getAbbreviation(match.homeTeam);
+                    const awayAbbr = getAbbreviation(match.awayTeam);
+                    return (
+                      <div key={match.id || index} className={styles.fixtureCard}>
+                        <div className={styles.fixtureInfoWrap}>
+                          <div className={styles.teamsBadgeStack}>
+                            <img src={match.homeTeamFlag || 'https://crests.football-data.org/764.svg'} alt={homeAbbr} className={styles.teamBadge} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
+                            <img src={match.awayTeamFlag || 'https://crests.football-data.org/773.svg'} alt={awayAbbr} className={styles.teamBadge} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
+                          </div>
+                          <div>
+                            <p className={styles.fixtureMatchName}>{homeAbbr} vs {awayAbbr}</p>
+                            <p className={styles.fixtureTime}>{formatMatchTime(match.date)}</p>
+                          </div>
+                        </div>
+                        {index === 0 ? (
+                          <div className={styles.fixtureHighlight}>X2 MULTI</div>
+                        ) : (
+                          <span className={`material-symbols-outlined ${styles.chevronIcon}`}>chevron_right</span>
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No upcoming fixtures...</p>
+                )}
               </div>
             </div>
 
             {/* Top Players This Week */}
             <div className={styles.glassPanelBase}>
-              <h3 className={styles.panelTitle}>GW Form Leaders</h3>
+              <h3 className={styles.panelTitle}>Top Fantasy Players</h3>
               <div className={styles.leadersList}>
-                <div className={styles.leaderRow}>
-                  <div className={styles.leaderInfo}>
-                    <span className={styles.leaderRank}>01</span>
-                    <div className={styles.leaderAvatar}>
-                      <img alt="Haaland" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWCDt0SY45Yd_AVFk4o6Owb3hz9EsII2XAdzyFEpA1SedoVH028WwDqy4G_bnNrVlqzcMTXwfK7a_p3hTl9j0W3GptOUATBUBy3SITlV5zGKHnHqF2KBKBbz75f38FjH5tU2rUOy3C_aWteO5Xj3WgMVAgZETu_xoSChw8Nl7LfO-dlDycebexvqWetzVMReB6avRi1P5eGrVcP8_PRPF3HC1jWZkJjrdWL0Ne6qQmCHOM_5J28bpmErU4sp_1m9PejxUHWpwpBhI" />
+                {topFantasyPlayers.length > 0 ? topFantasyPlayers.map((player, index) => (
+                  <div key={player._id || index}>
+                    <div className={styles.leaderRow}>
+                      <div className={styles.leaderInfo}>
+                        <span className={styles.leaderRank}>{index < 9 ? `0${index + 1}` : index + 1}</span>
+                        <div className={styles.leaderAvatar}>
+                          <img 
+                            alt={player.name} 
+                            src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} 
+                          />
+                        </div>
+                        <span className={styles.leaderName}>{player.name}</span>
+                      </div>
+                      <span className={index === 0 ? styles.leaderPtsGold : styles.leaderPts}>{player.points} PTS</span>
                     </div>
-                    <span className={styles.leaderName}>E. Haaland</span>
+                    {index < topFantasyPlayers.length - 1 && <div className={styles.dividerLine}></div>}
                   </div>
-                  <span className={styles.leaderPtsGold}>15 pts</span>
-                </div>
-
-                <div className={styles.dividerLine}></div>
-
-                <div className={styles.leaderRow}>
-                  <div className={styles.leaderInfo}>
-                    <span className={styles.leaderRank}>02</span>
-                    <div className={styles.leaderAvatar}>
-                      <img alt="Salah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrkdLrNetU_c5spkthQqZs9pNe49ySYgj-oWEr7Wh0hUQ1HDcozBgu2u0UTdfv8liUWJ-Q3z1dLY1tm2o924NVIyAHACQzGbukWLq8E5cas0JJWm1bsEnUBET9g8wQR2HHO3XSghyts9a3XRe1-FFg9p9XmgysRVW9B_LmQVt8ExG5oZHLsow7frlrhdrG3cQ0L2kiIyTxHYgV1-nW8KvKjNOG5jf-ocF5d1ni852nmbjWhwqSjvdZ_BVCIy39-X5a28ElI4uWjs4" />
-                    </div>
-                    <span className={styles.leaderName}>M. Salah</span>
-                  </div>
-                  <span className={styles.leaderPts}>12 pts</span>
-                </div>
-
-                <div className={styles.dividerLine}></div>
-
-                <div className={styles.leaderRow}>
-                  <div className={styles.leaderInfo}>
-                    <span className={styles.leaderRank}>03</span>
-                    <div className={styles.leaderAvatar}>
-                      <img alt="De Bruyne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN6nLy1bmiP-MbAxzZFSK65O8gyu4vW158nxzUclrBzmr1Rw4_nbugBMqdS-5SmBgiexVX-1n3Qs9ICdjcS-ebGxDYTMMTnQy-_krHVu41rYzQOQfRtAEPgNoNwCigiTrivu3LlaBIyQ7Q2NkT49RtMIPcNWFDDgCqmR_NTqth9IpKT8dCb1bEeYyPVTeXOv1HLvOK2UjBKin-s6TqznXYU1sfmKvYPJe-OJAmJfVxQTNKdT0uLNPbAnUiCs_mproVAkdKEWEnts0" />
-                    </div>
-                    <span className={styles.leaderName}>K. De Bruyne</span>
-                  </div>
-                  <span className={styles.leaderPts}>10 pts</span>
-                </div>
+                )) : (
+                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No players drafted yet...</p>
+                )}
               </div>
 
-              <button className={styles.viewReportBtn}>View Full Scout Report</button>
+              {/* <button className={styles.viewReportBtn}>View Full Scout Report</button> */}
             </div>
 
             {/* Quick Actions */}
