@@ -51,3 +51,7 @@ export const syncPlayers = async (token) => {
   return response.data;
 };
 
+export const getTeams = async () => {
+  const response = await axios.get(`${API_URL}/api/players/teams`);
+  return response.data;
+};

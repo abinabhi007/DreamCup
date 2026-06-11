@@ -277,7 +277,23 @@ const syncPlayers = async (req, res, next) => {
   }
 };
 
+const getTeams = async (req, res) => {
+  try {
+    const teams = await Player.distinct("team");
+
+    res.json({
+      count: teams.length,
+      teams,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getPlayers,
   syncPlayers,
+  getTeams,
 };

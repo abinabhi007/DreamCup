@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './MarketplaceContent.module.scss';
-import { getPlayers } from '../../src/services/playerService';
+import { getPlayers, getTeams } from '../../src/services/playerService';
 import { getTeam, addPlayer as apiAddPlayer } from '../../src/services/teamService';
 import toast from 'react-hot-toast';
 
@@ -41,10 +41,9 @@ export default function MarketplaceContent() {
 
   const loadAllTeams = async () => {
     try {
-      const data = await getPlayers({ limit: 300 });
-      if (data && data.players) {
-        const uniqueTeams = Array.from(new Set(data.players.map((p) => p.team))).sort();
-        setAllTeams(uniqueTeams);
+      const data = await getTeams();
+      if (data && data.teams) {
+        setAllTeams([...data.teams].sort());
       }
     } catch (error) {
       console.error('Failed to load teams list:', error);
@@ -189,7 +188,7 @@ export default function MarketplaceContent() {
             value={teamFilter}
             onChange={(e) => setTeamFilter(e.target.value)}
           >
-            <option value="All">Team: All Teams</option>
+            {/* <option value="All">Team: All Teams</option> */}
             {allTeams.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}

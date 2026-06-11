@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './MyTeamContent.module.scss';
-import { getPlayers } from '../../src/services/playerService';
+import { getPlayers, getTeams } from '../../src/services/playerService';
 import {
   getTeam,
   createTeam,
@@ -87,10 +87,9 @@ export default function MyTeamContent() {
 
   const loadAllTeams = async () => {
     try {
-      const data = await getPlayers({ limit: 300 });
-      if (data && data.players) {
-        const uniqueTeams = Array.from(new Set(data.players.map((p) => p.team))).sort();
-        setAllTeams(uniqueTeams);
+      const data = await getTeams();
+      if (data && data.teams) {
+        setAllTeams([...data.teams].sort());
       }
     } catch (error) {
       console.error('Failed to load teams list:', error);

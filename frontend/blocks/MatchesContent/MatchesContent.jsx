@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styles from './MatchesContent.module.scss';
 import { getMatchById } from '../../src/services/matchService';
 
@@ -8,6 +9,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [detailedMatch, setDetailedMatch] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
 
   const formatMatchTime = (utcString) => {
@@ -387,7 +389,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                           className={styles.viewDetailsBtnPremium}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedMatch(featuredMatch);
+                            router.push(`/matches/${featuredMatch.id}`);
                           }}
                         >
                           <span className={styles.btnText}>VIEW ANALYSIS</span>
@@ -437,7 +439,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                           className={styles.viewDetailsBtn}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedMatch(item);
+                            router.push(`/matches/${item.id}`);
                           }}
                         >
                           <span className={styles.btnText}>VIEW ANALYSIS</span>
