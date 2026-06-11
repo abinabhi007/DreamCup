@@ -14,7 +14,7 @@ export default function SideNav() {
     { name: 'Marketplace', path: '/marketplace', icon: 'storefront' },
     { name: 'Matches', path: '/matches', icon: 'sports_soccer' },
     { name: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
-    
+    { name: 'Admin', path: '/admin', icon: 'admin_panel_settings' },
   ];
 
   function handleLogout() {

@@ -7,6 +7,8 @@ const teamRoutes = require("./routes/teamRoutes");
 const leaderboardRoutes = require("./routes/leaderboardRoutes");
 const matchRoutes = require("./routes/matchRoutes");
 
+const adminRoutes = require("./routes/adminRoutes");
+
 const app = express();
 
 const allowedOrigins = [
@@ -63,6 +65,8 @@ app.use("/api/players", playerRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/matches", matchRoutes);
+
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.json({

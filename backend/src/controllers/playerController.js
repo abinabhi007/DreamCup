@@ -1,4 +1,5 @@
 const Player = require("../models/Player");
+const FantasyTeam = require("../models/FantasyTeam");
 
 const getPlayers = async (req, res) => {
   try {
