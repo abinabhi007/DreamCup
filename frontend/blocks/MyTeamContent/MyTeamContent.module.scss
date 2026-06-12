@@ -187,6 +187,10 @@
   display: flex;
   justify-content: space-around;
   gap: 16px;
+
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 }
 
 .fwdRow {
@@ -230,6 +234,11 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
   
   &:hover {
     border-color: var(--dc-secondary);
@@ -664,6 +673,11 @@
   cursor: pointer;
   overflow: hidden;
   transition: all 0.2s ease;
+
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
 
   &:hover {
     transform: scale(1.05);

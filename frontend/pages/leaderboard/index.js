@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
+import BottomNav from '../../blocks/BottomNav/BottomNav';
 import LeaderboardContent from '../../blocks/LeaderboardContent/LeaderboardContent';
 import Loader from '../../components/Loader/Loader';
 
@@ -30,6 +31,9 @@ export default function LeaderboardPage() {
 
           {/*Main Leaderboard Content*/}
           <LeaderboardContent />
+
+          {/*Mobile Bottom Navigation*/}
+          <BottomNav />
         </div>
       )}
     </>

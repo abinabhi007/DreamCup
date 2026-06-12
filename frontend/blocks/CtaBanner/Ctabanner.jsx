@@ -1,4 +1,5 @@
 import styles from './CtaBanner.module.scss';
+import Link from 'next/link';
 
 export default function CtaBanner() {
   return (
@@ -10,9 +11,9 @@ export default function CtaBanner() {
           <p className={styles.subtext}>
             Join the world's most competitive fantasy league today. Your dream team is waiting.
           </p>
-          <button className={styles.ctaBtn}>
+          <Link href='/my-team'><button className={styles.ctaBtn}>
             GET STARTED NOW
-          </button>
+          </button></Link>
         </div>
       </div>
     </section>

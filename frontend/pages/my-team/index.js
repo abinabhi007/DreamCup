@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
+import BottomNav from '../../blocks/BottomNav/BottomNav';
 import MyTeamContent from '../../blocks/MyTeamContent/MyTeamContent';
 import Loader from '../../components/Loader/Loader';
 
@@ -39,6 +40,9 @@ export default function MyTeamPage() {
 
           {/*Main Build Team Content*/}
           <MyTeamContent />
+
+          {/*Mobile Bottom Navigation*/}
+          <BottomNav />
         </div>
       )}
     </>

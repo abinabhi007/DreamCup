@@ -30,11 +30,11 @@ export default function Hero() {
 
         {/* CTA buttons */}
         <div className={styles.ctaRow}>
-          <a href="#" className={styles.btnPrimary} id="hero-create-team">
+          <a href="/my-team" className={styles.btnPrimary} id="hero-create-team">
             Create Team &nbsp;
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>sports_soccer</span>
           </a>
-          <a href="#" className={styles.btnOutline} id="hero-leaderboard">
+          <a href="/leaderboard" className={styles.btnOutline} id="hero-leaderboard">
             View Leaderboard
           </a>
         </div>

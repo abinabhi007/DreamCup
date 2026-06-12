@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
+import BottomNav from '../../blocks/BottomNav/BottomNav';
 import MatchesContent from '../../blocks/MatchesContent/MatchesContent';
 import Loader from '../../components/Loader/Loader';
 import { getMatches, getLiveMatches, getFinishedMatches, getStandings, getTopGoalScorers } from '../../src/services/matchService';
@@ -74,6 +75,9 @@ export default function MatchesPage() {
             loading={matchesLoading} 
             error={matchesError} 
           />
+
+          {/*Mobile Bottom Navigation*/}
+          <BottomNav />
         </div>
       )}
     </>

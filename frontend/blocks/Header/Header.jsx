@@ -36,9 +36,9 @@ export default function Header() {
 
           {/* Right Icons */}
           <div className={styles.actions}>
-            <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn}`}>notifications</span></Link>
+            {/* <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn}`}>notifications</span></Link> */}
             <Link href="/profile"><span className={`material-symbols-outlined ${styles.iconBtn}`}>account_circle</span></Link>
-            <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn} ${styles.hideMobile}`}>settings</span></Link>
+            {/* <Link href="#"><span className={`material-symbols-outlined ${styles.iconBtn} ${styles.hideMobile}`}>settings</span></Link> */}
             {/* Mobile Hamburger */}
             <span 
               className={`material-symbols-outlined ${styles.iconBtn} ${styles.showMobile}`}

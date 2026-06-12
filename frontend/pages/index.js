@@ -62,7 +62,7 @@ export default function HomePage() {
         <UpcomingMatches />
 
         {/* 6. Testimonials — Words from the Elite */}
-        <Testimonials />
+        {/* <Testimonials /> */}
 
         {/* 7. CTA Banner — Ready to Enter the Arena */}
         <CtaBanner />

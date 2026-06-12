@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import SideNav from '../../blocks/SideNav/SideNav';
+import BottomNav from '../../blocks/BottomNav/BottomNav';
 import ProfileContent from '../../blocks/ProfileContent/ProfileContent';
 import Loader from '../../components/Loader/Loader';
 import { useRouter } from 'next/router';
@@ -49,6 +50,9 @@ export default function ProfilePage() {
 
           {/*Main Profile Dashboard Panel*/}
           <ProfileContent />
+
+          {/*Mobile Bottom Navigation*/}
+          <BottomNav />
         </div>
       )}
     </>
