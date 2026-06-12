@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './AdminContent.module.scss';
 import { getPlayers } from '../../src/services/playerService';
-import { updatePlayerPoints, recalculateTeamPoints } from '../../src/services/adminService';
+import { updatePlayerPoints, recalculateTeamPoints, autoSyncPoints } from '../../src/services/adminService';
 import toast from 'react-hot-toast';
 
 export default function AdminContent() {
@@ -10,6 +10,7 @@ export default function AdminContent() {
   const [pointsToAdd, setPointsToAdd] = useState('');
   const [loadingPoints, setLoadingPoints] = useState(false);
   const [loadingRecalc, setLoadingRecalc] = useState(false);
+  const [loadingAutoSync, setLoadingAutoSync] = useState(false);
 
   useEffect(() => {
     // Load all players so the admin can search/select from a dropdown
@@ -73,6 +74,28 @@ export default function AdminContent() {
       toast.error(err.response?.data?.message || 'Error recalculating teams', { id: toastId });
     } finally {
       setLoadingRecalc(false);
+    }
+  };
+
+  const handleAutoSync = async () => {
+    const confirmSync = window.confirm('This will fetch real goal counts from the football-data API, overwrite player points (5 per goal), and recalculate all teams. Continue?');
+    if (!confirmSync) return;
+
+    const token = localStorage.getItem('token');
+    setLoadingAutoSync(true);
+    const toastId = toast.loading('Syncing points from API...');
+    try {
+      const res = await autoSyncPoints(token);
+      if (res && res.success) {
+        toast.success(res.message || 'Points synced and teams recalculated!', { id: toastId });
+      } else {
+        toast.error(res.message || 'Failed to sync points', { id: toastId });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Error syncing points', { id: toastId });
+    } finally {
+      setLoadingAutoSync(false);
     }
   };
 
@@ -151,6 +174,27 @@ export default function AdminContent() {
           >
             <span className="material-symbols-outlined">bolt</span>
             {loadingRecalc ? 'Recalculating...' : 'Trigger Recalculation'}
+          </button>
+        </div>
+
+        {/* Auto Sync Card */}
+        <div className={styles.adminCard}>
+          <h3 className={styles.cardTitle}>
+            <span className="material-symbols-outlined">cloud_download</span>
+            Auto-Sync Points from API
+          </h3>
+          <p className={styles.cardDesc}>
+            Fetch the latest top scorers from football-data.org, assign 5 points per goal, and instantly recalculate all fantasy teams globally.
+          </p>
+
+          <button 
+            className={styles.warningBtn}
+            onClick={handleAutoSync}
+            disabled={loadingAutoSync}
+            style={{ backgroundColor: 'var(--dc-secondary)', color: 'black' }}
+          >
+            <span className="material-symbols-outlined">sync</span>
+            {loadingAutoSync ? 'Syncing...' : 'Run Auto-Sync'}
           </button>
         </div>
 

@@ -24,3 +24,12 @@ export const recalculateTeamPoints = async (token) => {
   );
   return response.data;
 };
+
+export const autoSyncPoints = async (token) => {
+  const response = await axios.post(
+    `${API_URL}/api/admin/auto-sync-points`,
+    {},
+    { headers: getHeaders(token) }
+  );
+  return response.data;
+};

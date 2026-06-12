@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   updatePlayerPoints,
   recalculateTeamPoints,
+  autoSyncPointsFromApi,
 } = require("../controllers/adminController");
 
 router.post(
@@ -14,6 +15,11 @@ router.post(
 router.post(
   "/recalculate-team-points",
   recalculateTeamPoints
+);
+
+router.post(
+  "/auto-sync-points",
+  autoSyncPointsFromApi
 );
 
 module.exports = router;
