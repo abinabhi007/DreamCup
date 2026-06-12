@@ -105,7 +105,7 @@ export default function MarketplaceContent() {
 
   return (
     <div className={styles.mainContent}>
-      
+
       {/* Top Navigation */}
       <header className={styles.topNav}>
         <div className={styles.breadcrumbWrap}>
@@ -113,19 +113,19 @@ export default function MarketplaceContent() {
           <span className={styles.navDivider}>/</span>
           <span className={styles.navSubtitle}>Global Scouting</span>
         </div>
-        
+
         <div className={styles.actionsWrap}>
           <div className={styles.searchWrap}>
             <span className={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
-            <input 
-              className={styles.searchInput} 
-              type="text" 
-              placeholder="Search elite talent..." 
+            <input
+              className={styles.searchInput}
+              type="text"
+              placeholder="Search elite talent..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <div className={styles.actionBtnRow}>
             <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">notifications</span>
@@ -134,9 +134,9 @@ export default function MarketplaceContent() {
               <span className={`material-symbols-outlined ${styles.walletIcon}`}>account_balance_wallet</span>
               <span className={styles.walletBalance}>£{team ? team.budgetRemaining.toFixed(1) : '100.0'}M</span>
             </div>
-            <img 
-              alt="User Avatar" 
-              className={styles.userAvatar} 
+            <img
+              alt="User Avatar"
+              className={styles.userAvatar}
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSDQi16hgUAJPyrrGvBzVHzdCMS2mAfGXa4j97uOKziW-afOO881A2rewu66X1tmjRG2ggh2jfUD3jRS8Q4yKcGCWCrvCt-c5165vUsfI3-icsKjOcCjp9Bk8vbC0PKDJdPwi-1eC-FHPeouExFBlQF0VQuqLSJ_zAmxdCpSl3ugrrYZgC3ZM0HacFCFBSN31dIMZew1iiEtiE1qwXVIe9v3-9SqUmEYAVtwO-5KrN0sKV0ZVR7QCdl1Le-LKsz2UQ6iQTJ0tNkq4"
             />
           </div>
@@ -163,16 +163,16 @@ export default function MarketplaceContent() {
       <div className={styles.filterBar}>
         <div className={styles.mainSearchCol}>
           <span className={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
-          <input 
-            className={styles.mainSearchInput} 
-            type="text" 
-            placeholder="Search Player Name, Club or League..." 
+          <input
+            className={styles.mainSearchInput}
+            type="text"
+            placeholder="Search Player Name, Club or League..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className={styles.filterControls}>
-          <select 
+          <select
             className={styles.filterSelect}
             value={positionFilter}
             onChange={(e) => setPositionFilter(e.target.value)}
@@ -183,7 +183,7 @@ export default function MarketplaceContent() {
             <option value="MID">MID - Midfielder</option>
             <option value="FWD">FWD - Forward</option>
           </select>
-          <select 
+          <select
             className={styles.filterSelect}
             value={teamFilter}
             onChange={(e) => setTeamFilter(e.target.value)}
@@ -193,7 +193,7 @@ export default function MarketplaceContent() {
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
-          <select 
+          <select
             className={styles.filterSelect}
             value={priceSortOrder}
             onChange={(e) => setPriceSortOrder(e.target.value)}
@@ -226,23 +226,23 @@ export default function MarketplaceContent() {
             return (
               <div key={player._id} className={isPremium ? styles.premiumPlayerCard : styles.playerCard}>
                 <div className={styles.imageWrap}>
-                  <img 
-                    alt={player.name} 
-                    src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} 
-                    className={styles.playerImage} 
+                  <img
+                    alt={player.name}
+                    src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
+                    className={styles.playerImage}
                   />
                   <div className={styles.imageGradient}></div>
-                  
+
                   {isPremium && (
                     <div className={styles.topPickBadge}>TOP PICK</div>
                   )}
-                  
+
                   <div className={styles.playerInfoOverImage}>
                     <span className={isPremium ? styles.playerLeagueGold : styles.playerLeagueGrey}>WORLD CUP DIVISION</span>
                     <h3 className={styles.playerName}>{player.name}</h3>
                   </div>
                 </div>
-                
+
                 <div className={styles.cardBody}>
                   <div className={styles.clubRow}>
                     <div className={styles.clubInfo}>
@@ -253,7 +253,7 @@ export default function MarketplaceContent() {
                       {player.position === 'Goalkeeper' ? 'GK' : player.position === 'Defender' ? 'DEF' : player.position === 'Midfielder' ? 'MID' : 'FWD'}
                     </span>
                   </div>
-                  
+
                   <div className={styles.statsRow}>
                     <div className={styles.statCol}>
                       <p className={styles.statLabel}>PRICE</p>
@@ -266,7 +266,7 @@ export default function MarketplaceContent() {
                   </div>
 
                   {isAlreadyInTeam ? (
-                    <button 
+                    <button
                       className={styles.addBtnSuccess}
                       disabled
                     >
@@ -276,7 +276,7 @@ export default function MarketplaceContent() {
                       ADDED
                     </button>
                   ) : (
-                    <button 
+                    <button
                       className={isPremium ? styles.addBtnGold : styles.addBtnSurface}
                       onClick={() => handleAddPlayer(player._id)}
                     >
@@ -295,7 +295,7 @@ export default function MarketplaceContent() {
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <p className={styles.footerCopy}>© 2024 DreamCup Elite Performance</p>
+        <p className={styles.footerCopy}>© 2026 DreamCup Elite Performance</p>
         <div className={styles.footerLinks}>
           <a href="#" onClick={(e) => e.preventDefault()} className={styles.footerLink}>Terms</a>
           <a href="#" onClick={(e) => e.preventDefault()} className={styles.footerLink}>Privacy</a>

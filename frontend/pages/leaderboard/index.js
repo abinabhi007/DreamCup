@@ -6,17 +6,8 @@ import LeaderboardContent from '../../blocks/LeaderboardContent/LeaderboardConte
 import Loader from '../../components/Loader/Loader';
 
 export default function LeaderboardPage() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    setLoading(false);
-  }, [router]);
 
 
   return (

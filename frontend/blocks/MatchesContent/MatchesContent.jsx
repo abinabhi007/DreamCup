@@ -329,7 +329,8 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
             </div>
 
             {/* Match Cards */}
-            <div className={styles.matchCardsList}>
+            {['LIVE MATCHES', 'UPCOMING MATCHES', 'COMPLETED MATCHES'].includes(activeTab) && (
+              <div className={styles.matchCardsList}>
               {loading ? (
                 <div className={styles.loadingState}>
                   <div className={styles.spinner}></div>
@@ -474,7 +475,8 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                   )}
                 </>
               )}
-            </div>
+              </div>
+            )}
             
             {activeTab === 'STANDINGS' && (
               <div className={styles.standingsContainer}>

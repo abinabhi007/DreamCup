@@ -107,10 +107,10 @@ export default function LeaderboardContent() {
             <span className={`material-symbols-outlined ${styles.searchIcon}`} style={{ fontSize: 20 }}>
               search
             </span>
-            <input 
-              className={styles.searchInput} 
-              type="text" 
-              placeholder="Quick search..." 
+            <input
+              className={styles.searchInput}
+              type="text"
+              placeholder="Quick search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -122,9 +122,9 @@ export default function LeaderboardContent() {
             <button className={styles.actionBtn} title="Settings">
               <span className="material-symbols-outlined">settings</span>
             </button>
-            <img 
-              alt="User Profile" 
-              className={styles.userAvatar} 
+            <img
+              alt="User Profile"
+              className={styles.userAvatar}
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa93ePsXII7nFw7bZRtdnlC7uNLLIj0Yz1FPoC5eO4XG_W7M_tHth38x6b2KtzNUIVQY-WQ_wEDKnzvQy2LrU4rgfVTpTuVcOB0DnxoOzczdv1JmmsUqU-8GVHV_0_FTgE-msjR7nzTnIU8eKaJCxfp2AwNwS3xEXjKuIZ7TNm4kbjFv8qoxuUWuaCy-EdmeZknGndciAVgXu7Eppli00bYY9LhYk6lk_PX5OlptaXpB4JmNRLC2vtipwoKqQzXdpQWv-Pv4aoq1Y"
             />
           </div>
@@ -172,14 +172,14 @@ export default function LeaderboardContent() {
                     </div>
                     <div className={item.badgeClass}>{item.rank}</div>
                   </div>
-                  
+
                   <h3 className={item.rank === 1 ? styles.managerNameWinner : styles.managerName}>{item.name}</h3>
                   <p className={item.rank === 1 ? styles.teamNameWinner : styles.teamName}>{item.team}</p>
-                  
+
                   <div className={item.rank === 1 ? styles.pointsContainerWinner : styles.pointsContainer}>
                     <p className={styles.pointsLabel} style={{ color: item.rank === 1 ? '#FFD700' : item.rank === 2 ? 'var(--dc-primary)' : 'var(--dc-tertiary)' }}>TOTAL POINTS</p>
                     <p className={item.rank === 1 ? styles.pointsValueWinner : styles.pointsValue}>{item.points}</p>
-                    
+
                     {item.rank === 1 && (
                       <div className={styles.starsRow}>
                         {[...Array(5)].map((_, i) => (
@@ -197,17 +197,17 @@ export default function LeaderboardContent() {
           <div className={styles.controlsRow}>
             <div className={styles.searchControl}>
               <span className={`material-symbols-outlined ${styles.controlIcon}`}>search</span>
-              <input 
-                className={styles.mainSearchInput} 
-                type="text" 
-                placeholder="Search Managers" 
+              <input
+                className={styles.mainSearchInput}
+                type="text"
+                placeholder="Search Managers"
                 value={tableSearch}
                 onChange={(e) => setTableSearch(e.target.value)}
               />
             </div>
             <div className={styles.filterControl}>
               <span className={`material-symbols-outlined ${styles.controlIcon}`}>filter_list</span>
-              <select 
+              <select
                 className={styles.filterSelect}
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
@@ -283,7 +283,7 @@ export default function LeaderboardContent() {
       {/* Footer Area */}
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
-          <p className={styles.footerText}>© 2024 DreamCup Elite. All Rights Reserved.</p>
+          <p className={styles.footerText}>© 2026 DreamCup Elite. All Rights Reserved.</p>
         </div>
         <div className={styles.footerLinks}>
           <a href="#" onClick={e => e.preventDefault()} className={styles.footerLink}>Terms</a>

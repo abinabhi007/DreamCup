@@ -26,11 +26,11 @@ export default function RulesContent() {
 
   return (
     <div className={styles.mainLayout}>
-      
+
       <main className={styles.pageContent}>
         {/* Hero Header */}
         <header className={styles.heroHeader}>
-          <div 
+          <div
             className={styles.heroBg}
             style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7FAr5rcoSFj-AkQ7F2z1Sw7kj6iFtykHHC7uP7QP4sYf0DBRWmo_nL3z3I4o_COdPlz-iBQtixzmhNa_SlkF4grgI_PTovVjNgBTOR3sh8YOh-k_Wu0KmuBC3G79I3Q2SHu29MpM3ZniENYpZIs9D_2t5E_lwq9gbC8n0SmfBSEZ7FJth933kCUIq65_MYihWHw3ewfiFaAyE4PWXE_lvlSXmGPBpb4bMTWHRY5bRzgmJNvw_LJPudvidDgGmRdfC7LU5cmaLhEs')" }}
           ></div>
@@ -45,7 +45,7 @@ export default function RulesContent() {
 
         {/* Rules Bento Grid */}
         <section className={styles.rulesGrid}>
-          
+
           {/* Team Building */}
           <div className={styles.teamBuildingPanel}>
             <div className={styles.panelHeader}>
@@ -57,7 +57,7 @@ export default function RulesContent() {
                 <p className={styles.panelSubtitle}>Drafting your elite 15-player squad</p>
               </div>
             </div>
-            
+
             <div className={styles.positionsGrid}>
               <div className={styles.positionCard}>
                 <p className={styles.posLabel}>Goalkeepers</p>
@@ -76,8 +76,8 @@ export default function RulesContent() {
                 <p className={styles.posValue}>3</p>
               </div>
             </div>
-            
-            <p className={styles.teamNote}>Total of 15 players must be selected. You may select a maximum of 3 players from a single real-world club.</p>
+
+            <p className={styles.teamNote}>Total of 15 players must be selected. There are no restrictions on the number of players you can select from a single real-world club.</p>
           </div>
 
           {/* Budget */}
@@ -104,7 +104,7 @@ export default function RulesContent() {
                 <span className={styles.scoringPill}>Forwards</span>
               </div>
             </div>
-            
+
             <div className={styles.scoringGrid}>
               <div className={styles.scoringCard}>
                 <div className={styles.scoringCardTitleRow}>
@@ -113,7 +113,7 @@ export default function RulesContent() {
                 </div>
                 <p className={styles.scoringCardDesc}>Points vary by player position. Forwards earn 4, Defenders earn 6.</p>
               </div>
-              
+
               <div className={styles.scoringCard}>
                 <div className={styles.scoringCardTitleRow}>
                   <span className={styles.scoringCardTitle}>Assist</span>
@@ -121,7 +121,7 @@ export default function RulesContent() {
                 </div>
                 <p className={styles.scoringCardDesc}>Awarded for the final pass or shot leading to a goal.</p>
               </div>
-              
+
               <div className={styles.scoringCard}>
                 <div className={styles.scoringCardTitleRow}>
                   <span className={styles.scoringCardTitle}>Clean Sheet</span>
@@ -129,7 +129,7 @@ export default function RulesContent() {
                 </div>
                 <p className={styles.scoringCardDesc}>Earned by GK and Defenders if no goals are conceded.</p>
               </div>
-              
+
               <div className={styles.scoringCard}>
                 <div className={styles.scoringCardTitleRow}>
                   <span className={styles.scoringCardTitle}>Saves</span>
@@ -145,12 +145,11 @@ export default function RulesContent() {
             <div className={styles.captainWrap}>
               <div className={styles.captainBadgeWrap}>
                 <div className={styles.captainGlow}></div>
-                <div className={styles.captainBadge}>2X</div>
+                <div className={styles.captainBadge}>2X / 1.5X</div>
               </div>
               <div>
-                <h3 className={styles.captainTitle}>Captain Multiplier</h3>
-                <p className={styles.captainDesc}>Assign the armband to your top performer. Your captain earns double points every Gameweek.</p>
-                <p className={styles.captainNote}>If your captain doesn't play, the Vice-Captain bonus activates.</p>
+                <h3 className={styles.captainTitle}>Captain & Vice-Captain</h3>
+                <p className={styles.captainDesc}>Assign the armband to your top performers. Your Captain earns double points (2x) and your Vice-Captain earns a 1.5x multiplier every Gameweek.</p>
               </div>
             </div>
           </div>
@@ -161,25 +160,25 @@ export default function RulesContent() {
               <span className={`material-symbols-outlined ${styles.transferIcon}`}>sync_alt</span>
               <h3 className={styles.transferTitle}>Transfer Protocol</h3>
             </div>
-            
+
             <div className={styles.transferList}>
               <div className={styles.transferRow}>
                 <span className={styles.transferRowLabel}>Weekly Free Moves</span>
-                <span className={styles.transferRowValue}>1 FREE</span>
+                <span className={styles.transferRowValue}>UNLIMITED</span>
               </div>
               <div className={styles.transferRow}>
-                <span className={styles.transferRowLabel}>Additional Transfers</span>
-                <span className={styles.transferRowValueDanger}>-4 PTS EACH</span>
+                <span className={styles.transferRowLabel}>Point Deductions</span>
+                <span className={styles.transferRowValue}>NONE</span>
               </div>
               <div className={styles.transferRow}>
-                <span className={styles.transferRowLabel}>Rollover Limit</span>
-                <span className={styles.transferRowValue}>MAX 2 FREE</span>
+                <span className={styles.transferRowLabel}>Budget Constraint</span>
+                <span className={styles.transferRowValue}>STRICT £100.0M</span>
               </div>
             </div>
-            
-            <p className={styles.transferNote}>Transfers must be confirmed before the Gameweek Deadline.</p>
+
+            <p className={styles.transferNote}>You can transfer players freely without point deductions as long as you stay within your budget and position limits.</p>
           </div>
-          
+
         </section>
 
         {/* FAQ Section */}
@@ -187,8 +186,8 @@ export default function RulesContent() {
           <h2 className={styles.faqTitle}>Frequently Asked Questions</h2>
           <div className={styles.faqList}>
             {faqs.map((faq, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`${styles.faqItem} ${activeFaq === index ? styles.faqItemActive : ''}`}
               >
                 <button className={styles.faqBtn} onClick={() => toggleFaq(index)}>
@@ -210,7 +209,7 @@ export default function RulesContent() {
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <h2 className={styles.footerTitle}>DreamCup Elite</h2>
-            <p className={styles.footerCopy}>© 2024 DreamCup Elite. High-Performance Fantasy Sports.</p>
+            <p className={styles.footerCopy}>© 2026 DreamCup Elite. Designed and Developed by <Link href="https://abinhn.vercel.app" target='_blank' style={{color:"#ffe16d",textDecoration:"none"}}> Abin HN</Link></p>
           </div>
           <div className={styles.footerLinks}>
             <Link href="#" className={styles.footerLink}>Terms of Service</Link>

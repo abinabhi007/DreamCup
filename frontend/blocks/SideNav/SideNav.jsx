@@ -10,11 +10,10 @@ export default function SideNav() {
   const menuItems = [
     { name: 'Profile', path: '/profile', icon: 'person' },
     { name: 'My Team', path: '/my-team', icon: 'shield' },
-    { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
     { name: 'Marketplace', path: '/marketplace', icon: 'storefront' },
     { name: 'Matches', path: '/matches', icon: 'sports_soccer' },
     { name: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
-    { name: 'Admin', path: '/admin', icon: 'admin_panel_settings' },
+    // { name: 'Admin', path: '/admin', icon: 'admin_panel_settings' },
   ];
 
   function handleLogout() {

@@ -7,7 +7,7 @@ import Loader from '../../components/Loader/Loader';
 import { getMatches, getLiveMatches, getFinishedMatches, getStandings, getTopGoalScorers } from '../../src/services/matchService';
 
 export default function MatchesPage() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [matches, setMatches] = useState([]);
   const [liveMatches, setLiveMatches] = useState([]);
   const [finishedMatches, setFinishedMatches] = useState([]);
@@ -16,15 +16,6 @@ export default function MatchesPage() {
   const [matchesLoading, setMatchesLoading] = useState(true);
   const [matchesError, setMatchesError] = useState(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    setLoading(false);
-  }, [router]);
 
   useEffect(() => {
     fetchMatches();
