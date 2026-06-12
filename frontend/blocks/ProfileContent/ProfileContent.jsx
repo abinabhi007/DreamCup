@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './ProfileContent.module.scss';
-import { getProfile } from '../../src/services/authService';
+import { getProfile, updateProfile } from '../../src/services/authService';
 import { getFinishedMatches, getMatches } from '../../src/services/matchService';
 import { getTeam } from '../../src/services/teamService';
 import toast from 'react-hot-toast';
@@ -14,6 +14,8 @@ export default function ProfileContent() {
   const [team, setTeam] = useState(null);
   const [formation, setFormation] = useState('4-4-2');
   const [upcomingFixtures, setUpcomingFixtures] = useState([]);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editName, setEditName] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -155,7 +157,22 @@ export default function ProfileContent() {
 
 
   const handleEditProfile = () => {
-    alert('Edit Profile mode coming soon!');
+    setEditName(profileData?.user?.name || '');
+    setIsEditingProfile(true);
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await updateProfile({ name: editName }, token);
+      if (res.success) {
+        setProfileData({ ...profileData, user: { ...profileData.user, name: res.user.name } });
+        setIsEditingProfile(false);
+        toast.success("Profile updated successfully");
+      }
+    } catch (err) {
+      toast.error("Failed to update profile");
+    }
   };
 
   const handleShareProfile = () => {
@@ -494,6 +511,38 @@ export default function ProfileContent() {
         </section>
 
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditingProfile && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', width: '400px', maxWidth: '90%', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '20px', color: '#fff' }}>Edit Profile</h3>
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>Display Name</label>
+              <input 
+                type="text" 
+                value={editName} 
+                onChange={(e) => setEditName(e.target.value)} 
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff', fontSize: '16px' }}
+              />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <button 
+                onClick={() => setIsEditingProfile(false)}
+                style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', backgroundColor: 'transparent', color: '#fff', cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveProfile}
+                style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', backgroundColor: 'var(--dc-secondary)', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Brand Footer ── */}
       <footer className={styles.footer}>

@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import styles from './Register.module.scss';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { registerUser } from '../../src/services/authService';
+import { registerUser, verifyOTP } from '../../src/services/authService';
+import toast from 'react-hot-toast';
 
 export default function Register() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitStatus, setSubmitStatus] = useState('idle'); // 'idle' | 'loading' | 'success'
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
 
   // Validation States
   const [emailTouched, setEmailTouched] = useState(true); // touched initially since it's prefilled
@@ -50,15 +53,40 @@ export default function Register() {
     setSubmitStatus('loading');
 
     try {
-      await registerUser({ name: fullName, email, password });
+      const res = await registerUser({ name: fullName, email, password });
+      toast.success(res.message || "Registration successful! Please verify your email.");
       setSubmitStatus('success');
       
-      // Redirect to login after visual confirmation
+      // Transform to OTP screen after visual confirmation
       setTimeout(() => {
-        router.push('/login');
+        setIsVerifying(true);
+        setSubmitStatus('idle');
       }, 1500);
     } catch (error) {
       console.error("Registration failed:", error);
+      toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+      setSubmitStatus('idle');
+    }
+  };
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    if (submitStatus !== 'idle') return;
+    if (otpCode.length !== 6) return;
+    setSubmitStatus('loading');
+    try {
+      const response = await verifyOTP({ email, otp: otpCode });
+      if (response.success && response.token) {
+        localStorage.setItem('token', response.token);
+        toast.success(response.message || "Email verified successfully!");
+      }
+      setSubmitStatus('success');
+      setTimeout(() => {
+        router.push('/profile');
+      }, 1500);
+    } catch (error) {
+      console.error("OTP verification failed:", error);
+      toast.error(error.response?.data?.message || "OTP verification failed. Please try again.");
       setSubmitStatus('idle');
     }
   };
@@ -77,12 +105,14 @@ export default function Register() {
 
         {/* Register Card */}
         <div className={styles.glassCard}>
-          <div className={styles.titleArea}>
-            <h1 className={styles.cardTitle}>Join the Elite</h1>
-            <p className={styles.cardSubtitle}>Register now to build your dream performance team.</p>
-          </div>
+          {!isVerifying ? (
+            <>
+              <div className={styles.titleArea}>
+                <h1 className={styles.cardTitle}>Join the Elite</h1>
+                <p className={styles.cardSubtitle}>Register now to build your dream performance team.</p>
+              </div>
 
-          <form className={styles.form} onSubmit={handleSubmit}>
+              <form className={styles.form} onSubmit={handleSubmit}>
             {/* Full Name */}
             <div className={styles.inputGroup}>
               <label className={styles.label} htmlFor="fullName">Full Name</label>
@@ -270,6 +300,61 @@ export default function Register() {
               </Link>
             </p>
           </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.titleArea}>
+                <h1 className={styles.cardTitle}>Verify Your Email</h1>
+                <p className={styles.cardSubtitle}>Enter the 6-digit code sent to {email}.</p>
+              </div>
+              <form className={styles.form} onSubmit={handleVerify}>
+                <div className={styles.inputGroup}>
+                  <label className={styles.label} htmlFor="otp">Verification Code</label>
+                  <div className={styles.inputWrapper}>
+                    <span className={`material-symbols-outlined ${styles.inputIcon}`} style={{ fontSize: 20 }}>
+                      vpn_key
+                    </span>
+                    <input 
+                      className={styles.inputField} 
+                      id="otp" 
+                      type="text" 
+                      placeholder="123456"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value)}
+                      disabled={submitStatus !== 'idle'}
+                      required
+                      maxLength="6"
+                      style={{ letterSpacing: '4px', textAlign: 'center', fontWeight: 'bold' }}
+                    />
+                  </div>
+                </div>
+                <button 
+                  className={`${styles.submitBtn} ${styles.goldGradient} ${styles.goldGlow}`} 
+                  type="submit"
+                  disabled={submitStatus !== 'idle' || otpCode.length !== 6}
+                >
+                  {submitStatus === 'idle' && (
+                    <>
+                      Verify Account
+                      <span className={`material-symbols-outlined ${styles.btnArrow}`} style={{ fontSize: 20 }}>
+                        verified
+                      </span>
+                    </>
+                  )}
+                  {submitStatus === 'loading' && (
+                    <span className={`material-symbols-outlined ${styles.spinner}`} style={{ fontSize: 24 }}>
+                      progress_activity
+                    </span>
+                  )}
+                  {submitStatus === 'success' && (
+                    <span className="material-symbols-outlined text-green-400 animate-bounce" style={{ fontSize: 24 }}>
+                      check_circle
+                    </span>
+                  )}
+                </button>
+              </form>
+            </>
+          )}
         </div>
 
         

@@ -65,6 +65,7 @@ export default function Login() {
       }, 1500);
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error(error.response?.data?.message || "Login failed. Please check your credentials.");
       setSubmitStatus('idle');
     }
   };

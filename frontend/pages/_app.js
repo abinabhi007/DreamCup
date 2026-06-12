@@ -5,7 +5,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Component {...pageProps} />
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
     </>
   )
 }

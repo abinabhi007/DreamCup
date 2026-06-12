@@ -34,3 +34,26 @@ export const getProfile = async (token) => {
 
   return response.data;
 };
+
+export const verifyOTP = async (data) => {
+  const response = await axios.post(
+    `${API_URL}/api/auth/verify-otp`,
+    data
+  );
+
+  return response.data;
+};
+
+export const updateProfile = async (userData, token) => {
+  const response = await axios.put(
+    `${API_URL}/api/auth/profile`,
+    userData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
