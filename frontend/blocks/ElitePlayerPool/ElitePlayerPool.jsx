@@ -66,9 +66,10 @@ export default function ElitePlayerPool() {
           {/* Large card — Kylian Mbappé (md:col-span-8) */}
           <div className={`${styles.cardLarge} glass-panel premium-border`}>
             <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDztG9EadRU6orih5L4Nxvn_fUTKAXpiX-QCnQ6C_4z3fuGOcKUSPewdHqzyVYJ7s5kiBZLSBktoQ_7zKNw0fF_kE-irorG1soKnmIO14RwQwEn9BjmMZUv8lf1BpnJSptV9-fxzg2fZ4NVOCt0FwtFBp5lVwiYEFATRAxzD2QyOIMe86rGaweKSw3Vizq_vkrrHX35PeJPQYRzDMvboZLugL-_5q4BcsEJiOm9N2J5tZW2IDXoOZ0hCGPGLIAhAJqUtc01OdnQElc"
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b3/2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg"
               alt="Kylian Mbappé"
               className={styles.cardImg}
+              style={{ objectPosition: 'top' }}
             />
             <div className={styles.cardGradient} />
             <div className={styles.cardBottom}>
@@ -89,9 +90,10 @@ export default function ElitePlayerPool() {
             {/* Messi card (md:col-span-4) */}
             <div className={`${styles.cardSmall} glass-panel`}>
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkG3mjWfwE9TmhNNaDv0bP9_iVC4xSsh-Eg4RPJ1cHeHGv7SaUJl4rgEzGXkM0hPiadeKhdxf5QHtFfYy9jRA_oypvyv37Gpde5hRoU73qN2P70MKuLdKcZGZqCek338z1yz-CbKpV_BSD2h3bLgrs9qpfcNVX7ZO_Q-jTnV3w6-NbG9v3eIWHkf2lMQgtnnZEMObMjkAeEHcVvp-p_EpSzN3B6Z8QxMrS3CFDhtDRXkBEEALva-BXUlfyodXbQam1h94qfstuOMc"
+                src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"
                 alt="Lionel Messi"
                 className={`${styles.cardImg} ${styles.cardImgDim}`}
+                style={{ objectPosition: 'top' }}
               />
               <div className={styles.cardGradient} />
               <div className={styles.cardBottomSm}>
@@ -104,17 +106,18 @@ export default function ElitePlayerPool() {
               </div>
             </div>
 
-            {/* Haaland card (md:col-span-4) */}
+            {/* Ronaldo card (md:col-span-4) */}
             <div className={`${styles.cardSmall} glass-panel`}>
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX7qiZoD0sz46Om0-ThVyt7GKwhYEhFGJwBpeEM3BTALLvAliilr4l60myG7nwQkGv8hQzyOFafnFrniz8DZas6uKJQFMYMW255Ki-OP42CmWCComsM9Hd0A7GhM5Ux5qgto5iwa0Pdwi2o99BFWtjV9lPOuhxQBNhElCU8w0CCtcavTAwaApBrlRMyv3S37qgz5W5bp6r0SfggE4Nm3E27-nyHzAnRXzYqFUB5MHI6HpVRZr4SZQ9ua9S09LRmL8Rre7MyzozXhA"
-                alt="Erling Haaland"
+                src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"
+                alt="Cristiano Ronaldo"
                 className={`${styles.cardImg} ${styles.cardImgDim}`}
+                style={{ objectPosition: 'top' }}
               />
               <div className={styles.cardGradient} />
               <div className={styles.cardBottomSm}>
-                <h3 className={styles.playerNameSm}>Erling Haaland</h3>
-                <p className={styles.playerMetaSm}>Forward • Norway</p>
+                <h3 className={styles.playerNameSm}>Cristiano Ronaldo</h3>
+                <p className={styles.playerMetaSm}>Forward • Portugal</p>
                 <div className={styles.ptsBadge}>
                   <span className="material-symbols-outlined" style={{ color: 'var(--dc-secondary-fixed)', fontSize: 18 }}>bolt</span>
                   <span className={styles.ptsBadgeText}>215 pts</span>
