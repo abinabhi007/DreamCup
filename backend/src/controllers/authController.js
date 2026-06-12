@@ -46,43 +46,45 @@ const registerUser = async (req, res) => {
     user.otpExpiry = otpExpiry;
     await user.save();
 
-    sendEmail({
-      email: user.email,
-      subject: "Verify your DreamCup account",
-      message: `Your verification code is ${otp}. It expires in 10 minutes.`,
-      html: `
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0d1117; color: #e6edf3; padding: 40px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d4af37; margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;">DreamCup</h1>
-            <p style="color: #8b949e; font-size: 14px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Elite Fantasy Football</p>
-          </div>
-          
-          <div style="background-color: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #21262d;">
-            <h2 style="margin-top: 0; color: #ffffff; font-size: 22px; text-align: center;">Verify Your Email Address</h2>
-            <p style="font-size: 16px; line-height: 1.6; color: #c9d1d9; text-align: center;">
-              Welcome to DreamCup! You're just one step away from building your elite squad. Please use the verification code below to activate your account.
-            </p>
-            
-            <div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin: 30px 0; text-align: center;">
-              <span style="font-family: monospace; font-size: 36px; font-weight: bold; color: #d4af37; letter-spacing: 8px;">${otp}</span>
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Verify your DreamCup account",
+        message: `Your verification code is ${otp}. It expires in 10 minutes.`,
+        html: `
+          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0d1117; color: #e6edf3; padding: 40px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #d4af37; margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;">DreamCup</h1>
+              <p style="color: #8b949e; font-size: 14px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Elite Fantasy Football</p>
             </div>
             
-            <p style="font-size: 14px; color: #8b949e; text-align: center; margin-bottom: 0;">
-              This code will expire in <strong>10 minutes</strong>.<br/>
-              If you did not request this, please safely ignore this email.
-            </p>
+            <div style="background-color: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #21262d;">
+              <h2 style="margin-top: 0; color: #ffffff; font-size: 22px; text-align: center;">Verify Your Email Address</h2>
+              <p style="font-size: 16px; line-height: 1.6; color: #c9d1d9; text-align: center;">
+                Welcome to DreamCup! You're just one step away from building your elite squad. Please use the verification code below to activate your account.
+              </p>
+              
+              <div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin: 30px 0; text-align: center;">
+                <span style="font-family: monospace; font-size: 36px; font-weight: bold; color: #d4af37; letter-spacing: 8px;">${otp}</span>
+              </div>
+              
+              <p style="font-size: 14px; color: #8b949e; text-align: center; margin-bottom: 0;">
+                This code will expire in <strong>10 minutes</strong>.<br/>
+                If you did not request this, please safely ignore this email.
+              </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; border-top: 1px solid #30363d; padding-top: 20px;">
+              <p style="font-size: 12px; color: #8b949e;">
+                &copy; ${new Date().getFullYear()} DreamCup Elite. All rights reserved.
+              </p>
+            </div>
           </div>
-          
-          <div style="text-align: center; margin-top: 30px; border-top: 1px solid #30363d; padding-top: 20px;">
-            <p style="font-size: 12px; color: #8b949e;">
-              &copy; ${new Date().getFullYear()} DreamCup Elite. All rights reserved.
-            </p>
-          </div>
-        </div>
-      `,
-    }).catch(emailError => {
+        `,
+      });
+    } catch (emailError) {
       console.error("Error sending OTP email:", emailError);
-    });
+    }
 
     res.status(201).json({
       success: true,
@@ -342,41 +344,46 @@ const resendOTP = async (req, res) => {
     user.otpExpiry = otpExpiry;
     await user.save();
 
-    sendEmail({
-      email: user.email,
-      subject: "Your New Verification Code - DreamCup Elite",
-      message: `Your verification code is ${otp}. It expires in 10 minutes.`,
-      html: `
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0d1117; color: #e6edf3; padding: 40px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #d4af37; margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;">DreamCup</h1>
-            <p style="color: #8b949e; font-size: 14px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Elite Fantasy Football</p>
-          </div>
-          
-          <div style="background-color: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #21262d;">
-            <h2 style="margin-top: 0; color: #ffffff; font-size: 22px; text-align: center;">New Verification Code</h2>
-            <p style="font-size: 16px; line-height: 1.6; color: #c9d1d9; text-align: center;">
-              You requested a new verification code. Please use the code below to activate your account.
-            </p>
-            
-            <div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin: 30px 0; text-align: center;">
-              <span style="font-family: monospace; font-size: 36px; font-weight: bold; color: #d4af37; letter-spacing: 8px;">${otp}</span>
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Your New Verification Code - DreamCup Elite",
+        message: `Your verification code is ${otp}. It expires in 10 minutes.`,
+        html: `
+          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0d1117; color: #e6edf3; padding: 40px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #d4af37; margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;">DreamCup</h1>
+              <p style="color: #8b949e; font-size: 14px; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Elite Fantasy Football</p>
             </div>
             
-            <p style="font-size: 14px; color: #8b949e; text-align: center; margin-bottom: 0;">
-              This code will expire in <strong>10 minutes</strong>.
-            </p>
+            <div style="background-color: #161b22; padding: 30px; border-radius: 8px; border: 1px solid #21262d;">
+              <h2 style="margin-top: 0; color: #ffffff; font-size: 22px; text-align: center;">New Verification Code</h2>
+              <p style="font-size: 16px; line-height: 1.6; color: #c9d1d9; text-align: center;">
+                You requested a new verification code. Please use the code below to activate your account.
+              </p>
+              
+              <div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 20px; margin: 30px 0; text-align: center;">
+                <span style="font-family: monospace; font-size: 36px; font-weight: bold; color: #d4af37; letter-spacing: 8px;">${otp}</span>
+              </div>
+              
+              <p style="font-size: 14px; color: #8b949e; text-align: center; margin-bottom: 0;">
+                This code will expire in <strong>10 minutes</strong>.
+              </p>
+            </div>
           </div>
-        </div>
-      `,
-    }).catch(emailError => {
+        `,
+      });
+      res.status(200).json({
+        success: true,
+        message: "New OTP sent successfully",
+      });
+    } catch (emailError) {
       console.error("Error sending OTP email:", emailError);
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "New OTP sent successfully",
-    });
+      return res.status(500).json({
+        success: false,
+        message: "Error sending OTP email",
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({
