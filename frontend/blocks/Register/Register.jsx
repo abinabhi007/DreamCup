@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styles from './Register.module.scss';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { registerUser, verifyOTP } from '../../src/services/authService';
+import { registerUser, verifyOTP, resendOTP } from '../../src/services/authService';
 import toast from 'react-hot-toast';
 
 export default function Register() {
@@ -87,6 +87,20 @@ export default function Register() {
     } catch (error) {
       console.error("OTP verification failed:", error);
       toast.error(error.response?.data?.message || "OTP verification failed. Please try again.");
+      setSubmitStatus('idle');
+    }
+  };
+
+  const handleResendOTP = async () => {
+    if (submitStatus === 'loading') return;
+    setSubmitStatus('loading');
+    try {
+      const response = await resendOTP({ email });
+      toast.success(response.message || "New OTP sent!");
+      setSubmitStatus('idle');
+    } catch (error) {
+      console.error("Resend OTP failed:", error);
+      toast.error(error.response?.data?.message || "Failed to resend OTP. Please try again.");
       setSubmitStatus('idle');
     }
   };
@@ -264,32 +278,7 @@ export default function Register() {
             </button>
           </form>
 
-          {/* Social Divider */}
-          <div className={styles.socialDivider}>
-            <div className={styles.dividerLine} />
-            <div className={styles.dividerText}>Or sign up with</div>
-          </div>
-
-          {/* Social Logins */}
-          <div className={styles.socialGrid}>
-            <button className={styles.socialBtn} type="button" title="Sign up with Google" disabled={submitStatus !== 'idle'}>
-              <img 
-                alt="Google" 
-                className={styles.socialIconGoogle} 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2PbO9923PuemyLSbEswbpG9enZ9Ld-nqe07Mrc-Je7ieQvh8wD6GQjV31kXwWo6EN97MFTvrzLd-GTlgxVEvvJZUH7I-QQG0cOaC4Bohqkki-JTIz8GoixCmgyZ92ZHmWdty7FMW0NN9XiSOk4QTe8Ppi6P1jDyWGs0AqFUS4_m6oeWyZ4YY565byf42UjO51DK5-smOrKP8SwMMvNEWm6X4ik1dHVwxl-GuvRipPTcOAEi3ITKnLeQNAZ6m5CtBbo0_kUaS-yzU" 
-              />
-            </button>
-            <button className={styles.socialBtn} type="button" title="Sign up with Leaderboard" disabled={submitStatus !== 'idle'}>
-              <span className={`material-symbols-outlined ${styles.socialIconSvg}`} style={{ fontSize: 20 }}>
-                social_leaderboard
-              </span>
-            </button>
-            <button className={styles.socialBtn} type="button" title="Sign up with Apple" disabled={submitStatus !== 'idle'}>
-              <span className={`material-symbols-outlined ${styles.socialIconSvg}`} style={{ fontSize: 20 }}>
-                ios
-              </span>
-            </button>
-          </div>
+          
 
           {/* Prompt Login redirect */}
           <div className={styles.loginPromptArea}>
@@ -352,6 +341,18 @@ export default function Register() {
                     </span>
                   )}
                 </button>
+                
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', marginBottom: '8px' }}>Didn't receive the code?</p>
+                  <button 
+                    type="button" 
+                    onClick={handleResendOTP} 
+                    disabled={submitStatus === 'loading'}
+                    style={{ background: 'transparent', border: 'none', color: '#d4af37', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px' }}
+                  >
+                    Resend Code
+                  </button>
+                </div>
               </form>
             </>
           )}

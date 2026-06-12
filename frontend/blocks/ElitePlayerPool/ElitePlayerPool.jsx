@@ -101,7 +101,7 @@ export default function ElitePlayerPool() {
                 <p className={styles.playerMetaSm}>Midfielder • Argentina</p>
                 <div className={styles.ptsBadge}>
                   <span className="material-symbols-outlined" style={{ color: 'var(--dc-secondary-fixed)', fontSize: 18 }}>trending_up</span>
-                  <span className={styles.ptsBadgeText}>192 pts</span>
+                  <span className={styles.ptsBadgeText}>226 pts</span>
                 </div>
               </div>
             </div>

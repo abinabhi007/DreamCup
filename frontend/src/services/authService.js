@@ -57,3 +57,12 @@ export const updateProfile = async (userData, token) => {
 
   return response.data;
 };
+
+export const resendOTP = async (data) => {
+  const response = await axios.post(
+    `${API_URL}/api/auth/resend-otp`,
+    data
+  );
+
+  return response.data;
+};
