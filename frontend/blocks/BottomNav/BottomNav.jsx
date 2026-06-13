@@ -7,10 +7,12 @@ export default function BottomNav() {
   const currentPath = router.pathname;
 
   const menuItems = [
-    { name: 'Profile', path: '/profile', icon: 'person' },
-    { name: 'My Team', path: '/my-team', icon: 'shield' },
+    { name: 'Home', path: '/', icon: 'home' },
     { name: 'Matches', path: '/matches', icon: 'sports_soccer' },
-    { name: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
+    { name: 'Market', path: '/marketplace', icon: 'storefront' },
+    { name: 'My Team', path: '/my-team', icon: 'shield' },
+    { name: 'Rankings', path: '/leaderboard', icon: 'leaderboard' },
+    { name: 'Profile', path: '/profile', icon: 'person' },
   ];
 
   return (

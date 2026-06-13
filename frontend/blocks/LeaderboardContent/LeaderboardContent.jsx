@@ -116,12 +116,12 @@ export default function LeaderboardContent() {
             />
           </div>
           <div className={styles.actionBtnRow}>
-            <button className={styles.actionBtn} title="Notifications">
+            {/* <button className={styles.actionBtn} title="Notifications">
               <span className="material-symbols-outlined">notifications</span>
             </button>
             <button className={styles.actionBtn} title="Settings">
               <span className="material-symbols-outlined">settings</span>
-            </button>
+            </button> */}
             <img
               alt="User Profile"
               className={styles.userAvatar}

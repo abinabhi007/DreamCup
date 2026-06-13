@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import MarketplaceContent from '../../blocks/MarketplaceContent/MarketplaceContent';
 import Loader from '../../components/Loader/Loader';
+import BottomNav from '../../blocks/BottomNav/BottomNav';
 
 export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,9 @@ export default function MarketplacePage() {
 
           {/*Main Marketplace Content*/}
           <MarketplaceContent />
+
+          {/*Persistent Footer Navigation*/}
+          <BottomNav />
         </div>
       )}
     </>

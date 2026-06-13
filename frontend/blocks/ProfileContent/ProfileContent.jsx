@@ -201,14 +201,14 @@ export default function ProfileContent() {
 
         {/* Right Details Group */}
         <div className={styles.actionsWrap}>
-          <div className={styles.actionBtnRow}>
+          {/* <div className={styles.actionBtnRow}>
             <button className={styles.actionBtn} title="Notifications">
               <span className="material-symbols-outlined">notifications</span>
             </button>
             <button className={styles.actionBtn} title="Settings">
               <span className="material-symbols-outlined">settings</span>
             </button>
-          </div>
+          </div> */}
 
           <div className={styles.divider}></div>
 

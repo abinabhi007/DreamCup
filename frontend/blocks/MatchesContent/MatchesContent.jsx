@@ -283,10 +283,10 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
             </div>
           </div>
           <div className={styles.actionsWrap}>
-            <button className={styles.actionBtn}>
+            {/* <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">notifications</span>
               <span className={styles.badgeDot}></span>
-            </button>
+            </button> */}
             <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">history</span>
             </button>

@@ -127,9 +127,9 @@ export default function MarketplaceContent() {
           </div>
 
           <div className={styles.actionBtnRow}>
-            <button className={styles.actionBtn}>
+            {/* <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">notifications</span>
-            </button>
+            </button> */}
             <div className={styles.walletBadge}>
               <span className={`material-symbols-outlined ${styles.walletIcon}`}>account_balance_wallet</span>
               <span className={styles.walletBalance}>£{team ? team.budgetRemaining.toFixed(1) : '100.0'}M</span>
