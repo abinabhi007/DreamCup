@@ -106,6 +106,12 @@
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
 }
 
 .btnPrimary {
@@ -131,6 +137,11 @@
     color: var(--dc-on-secondary);
     text-decoration: none;
   }
+
+  @media (max-width: 575px) {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .btnOutline {
@@ -154,5 +165,10 @@
     border-color: rgba(255,255,255,0.4);
     color: #fff;
     text-decoration: none;
+  }
+
+  @media (max-width: 575px) {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import SideNav from '../../blocks/SideNav/SideNav';
 import Loader from '../../components/Loader/Loader';
@@ -85,7 +87,12 @@ export default function MatchDetailsPage() {
           {error ? (
             <div style={{ color: 'var(--dc-error)', fontSize: '24px', fontWeight: 'bold' }}>{error}</div>
           ) : matchData ? (
-            <div style={{ background: 'rgba(22, 46, 77, 0.7)', borderRadius: '16px', padding: '48px', backdropFilter: 'blur(15px)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <motion.div 
+              style={{ background: 'rgba(22, 46, 77, 0.7)', borderRadius: '16px', padding: '48px', backdropFilter: 'blur(15px)', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div style={{ textAlign: 'center', marginBottom: '48px' }}>
                 <span style={{ color: '#e9c400', fontWeight: 'bold', letterSpacing: '2px', fontSize: '14px' }}>
                   {matchData.status === 'FINISHED' ? 'FINISHED' : ['LIVE', 'IN_PLAY', 'PAUSED', 'HT'].includes(matchData.status) ? 'LIVE' : 'UPCOMING'}
@@ -95,7 +102,7 @@ export default function MatchDetailsPage() {
 
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '64px' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <img src={matchData.homeTeamFlag || 'https://crests.football-data.org/764.svg'} alt={matchData.homeTeam} style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
+                  <Image src={matchData.homeTeamFlag || 'https://crests.football-data.org/764.svg'} alt={matchData.homeTeam} width={120} height={120} style={{ objectFit: 'contain' }} />
                   <h2 style={{ color: '#fff', fontSize: '24px', marginTop: '16px' }}>{matchData.homeTeam}</h2>
                 </div>
 
@@ -117,7 +124,7 @@ export default function MatchDetailsPage() {
                 </div>
 
                 <div style={{ textAlign: 'center' }}>
-                  <img src={matchData.awayTeamFlag || 'https://crests.football-data.org/773.svg'} alt={matchData.awayTeam} style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
+                  <Image src={matchData.awayTeamFlag || 'https://crests.football-data.org/773.svg'} alt={matchData.awayTeam} width={120} height={120} style={{ objectFit: 'contain' }} />
                   <h2 style={{ color: '#fff', fontSize: '24px', marginTop: '16px' }}>{matchData.awayTeam}</h2>
                 </div>
               </div>
@@ -138,7 +145,7 @@ export default function MatchDetailsPage() {
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                     {fantasyPlayers.map(player => (
                       <div key={player._id} style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', width: '280px' }}>
-                        <img src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} alt={player.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} />
+                        <Image src={player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} alt={player.name} width={48} height={48} style={{ borderRadius: '50%', objectFit: 'cover' }} />
                         <div>
                           <div style={{ color: '#fff', fontWeight: 'bold' }}>{player.name}</div>
                           <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', marginTop: '4px' }}>{player.position} • {player.team}</div>
@@ -149,7 +156,7 @@ export default function MatchDetailsPage() {
                 </div>
               )}
 
-            </div>
+            </motion.div>
           ) : (
             <div style={{ color: '#fff' }}>Loading match data...</div>
           )}

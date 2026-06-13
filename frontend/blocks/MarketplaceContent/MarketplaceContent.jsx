@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './MarketplaceContent.module.scss';
 import { getPlayers, getTeams } from '../../src/services/playerService';
 import { getTeam, addPlayer as apiAddPlayer } from '../../src/services/teamService';
@@ -104,7 +106,12 @@ export default function MarketplaceContent() {
   });
 
   return (
-    <div className={styles.mainContent}>
+    <motion.div 
+      className={styles.mainContent}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
 
       {/* Top Navigation */}
       <header className={styles.topNav}>
@@ -134,10 +141,12 @@ export default function MarketplaceContent() {
               <span className={`material-symbols-outlined ${styles.walletIcon}`}>account_balance_wallet</span>
               <span className={styles.walletBalance}>£{team ? team.budgetRemaining.toFixed(1) : '100.0'}M</span>
             </div>
-            <img
+            <Image
               alt="User Avatar"
               className={styles.userAvatar}
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSDQi16hgUAJPyrrGvBzVHzdCMS2mAfGXa4j97uOKziW-afOO881A2rewu66X1tmjRG2ggh2jfUD3jRS8Q4yKcGCWCrvCt-c5165vUsfI3-icsKjOcCjp9Bk8vbC0PKDJdPwi-1eC-FHPeouExFBlQF0VQuqLSJ_zAmxdCpSl3ugrrYZgC3ZM0HacFCFBSN31dIMZew1iiEtiE1qwXVIe9v3-9SqUmEYAVtwO-5KrN0sKV0ZVR7QCdl1Le-LKsz2UQ6iQTJ0tNkq4"
+              width={40}
+              height={40}
             />
           </div>
         </div>
@@ -226,10 +235,12 @@ export default function MarketplaceContent() {
             return (
               <div key={player._id} className={isPremium ? styles.premiumPlayerCard : styles.playerCard}>
                 <div className={styles.imageWrap}>
-                  <img
+                  <Image
                     alt={player.name}
                     src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
                     className={styles.playerImage}
+                    fill
+                    style={{ objectFit: 'cover' }}
                   />
                   <div className={styles.imageGradient}></div>
 
@@ -308,6 +319,6 @@ export default function MarketplaceContent() {
         <span className="material-symbols-outlined">arrow_upward</span>
       </button>
 
-    </div>
+    </motion.div>
   );
 }

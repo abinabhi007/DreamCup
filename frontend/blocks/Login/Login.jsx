@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import styles from './Login.module.scss';
 import { loginUser } from '../../src/services/authService';
@@ -81,7 +83,12 @@ export default function Login() {
       </div>
 
       {/* Main Content Canvas */}
-      <main className={styles.cardContainer}>
+      <motion.main 
+        className={styles.cardContainer}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <div 
           ref={cardRef} 
           className={styles.glassPanel}
@@ -90,10 +97,13 @@ export default function Login() {
           {/* Branding Header */}
           <header className={styles.header}>
             <Link href="/" className={styles.logoContainer} title="DreamCup Home">
-              <img 
+              <Image 
                 alt="DreamCup Premium Logo" 
                 className={styles.logoImage} 
                 src="/premium_logo.png" 
+                width={64}
+                height={64}
+                style={{ objectFit: 'contain' }}
               />
             </Link>
             <h1 className={styles.title}>
@@ -211,7 +221,7 @@ export default function Login() {
             </Link>
           </footer>
         </div>
-      </main>
+      </motion.main>
     </div>
   );
 }

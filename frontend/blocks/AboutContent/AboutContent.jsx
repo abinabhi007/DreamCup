@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './AboutContent.module.scss';
 import Link from 'next/link';
 
@@ -50,8 +52,15 @@ export default function AboutContent() {
   return (
     <div className={styles.mainContainer}>
       
+      
       {/* Section 1: Hero */}
-      <section className={styles.heroSection}>
+      <motion.section 
+        className={styles.heroSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.heroGlows}>
           <div className={styles.glowTop}></div>
           <div className={styles.glowBottom}></div>
@@ -69,10 +78,16 @@ export default function AboutContent() {
             <button className={styles.secondaryBtn}>View Live Leaderboard</button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 2: Mission */}
-      <section className={styles.missionSection}>
+      <motion.section 
+        className={styles.missionSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.missionInner}>
           <div className={styles.missionText}>
             <h2 className={styles.missionTitle}>Empowering Fans Through Data-Driven Competition</h2>
@@ -91,17 +106,25 @@ export default function AboutContent() {
             </div>
           </div>
           <div className={styles.missionImageWrap}>
-            <img 
+            <Image 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9jj2epWpA3vJD3k4eTfEndX-gaQ7WSEZ9UsoytwJzZiUEM5-WHS-TYcq_s-mSxE-fHvcOVKuRbLLoJe1Ju4UO53P0h78GHggx7YwxsWB8tFZDMj7HCpJbaz_Jz4YoF4hMiNLikIdxj3Jz6IgDvnCJNqX4CO1bwWDYkABqMlYLtf7zWjJm6YtRH3ksoGl9nyZII3ibQXCsXS4nB6L_4Yoa2oDGhCc_JwoX88HLCZ_uehrBKtP1qXf9zTEnIqArWXWxm0_DqXtf9as" 
               alt="Stadium" 
+              fill
+              style={{ objectFit: 'cover' }}
             />
             <div className={styles.imageOverlay}></div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 3: Platform Features */}
-      <section className={styles.featuresSection}>
+      <motion.section 
+        className={styles.featuresSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.featuresInner}>
           <div className={styles.sectionHeaderCenter}>
             <h2 className={styles.sectionTitle}>Engineered for Performance</h2>
@@ -134,10 +157,16 @@ export default function AboutContent() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 4: Why Choose DreamCup (Bento) */}
-      <section className={styles.bentoSection}>
+      <motion.section 
+        className={styles.bentoSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.bentoInner}>
           <div className={styles.bentoHeader}>
             <h2 className={styles.bentoTitle}>The DreamCup Edge</h2>
@@ -145,10 +174,12 @@ export default function AboutContent() {
           <div className={styles.bentoGrid}>
             
             <div className={styles.bentoCard1}>
-              <img 
+              <Image 
                 className={styles.bentoBg} 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR-J4eqdZzqP_-3vAe12AhbjfhIC3oddDhTqWRiSMq-V-mi3OTno5uPQJUNZNR64-q7moEy-H5-kSxvVWcr0S0VvjUHgcH-U45bk6d-nKI7X0MFrC8vYEN9PmHqc1yVhbjWbOrg3jIAp4t4uuXoupKSNY8YI5P2MRzrop1atrSVmTqL3lNTTSw9RvwTGBqTJR7Tuf50Q6Svcg_xeucOFC-OpGLNtrN8gocO7Ra7PfFHVANVt7oD9lGsAc2kZTdvlwN_B4lmxeBeyM" 
                 alt="Trophy" 
+                fill
+                style={{ objectFit: 'cover' }}
               />
               <div className={styles.bentoContent}>
                 <h3 className={styles.bentoTitle1}>Exclusive Rewards</h3>
@@ -174,10 +205,16 @@ export default function AboutContent() {
 
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 5: Team Section */}
-      <section className={styles.teamSection}>
+      <motion.section 
+        className={styles.teamSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.teamInner}>
           <div className={styles.sectionHeaderCenter}>
             <h2 className={styles.sectionTitle}>Elite Performance Specialists</h2>
@@ -187,7 +224,7 @@ export default function AboutContent() {
             {team.map((member, idx) => (
               <div key={idx} className={styles.teamMember}>
                 <div className={`${styles.memberImgWrap} ${idx === 0 ? styles.memberImgGold : ''}`}>
-                  <img className={styles.memberImg} src={member.image} alt={member.name} />
+                  <Image className={styles.memberImg} src={member.image} alt={member.name} fill style={{ objectFit: 'cover' }} />
                 </div>
                 <h4 className={styles.memberName}>{member.name}</h4>
                 <p className={styles.memberRole}>{member.role}</p>
@@ -195,10 +232,16 @@ export default function AboutContent() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 6: FAQ */}
-      <section className={styles.faqSection}>
+      <motion.section 
+        className={styles.faqSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.faqInner}>
           <div className={styles.sectionHeaderCenter}>
             <h2 className={styles.sectionTitle} style={{ fontSize: 32 }}>Frequently Asked Questions</h2>
@@ -221,16 +264,22 @@ export default function AboutContent() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Section 7: CTA */}
-      <section className={styles.ctaSection}>
+      <motion.section 
+        className={styles.ctaSection}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className={styles.ctaBg}></div>
         <div className={styles.ctaInner}>
           <h2 className={styles.ctaTitle}>Ready to Lead Your Team to Glory?</h2>
           <button className={styles.ctaBtn}>Create Your Dream Team Now</button>
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

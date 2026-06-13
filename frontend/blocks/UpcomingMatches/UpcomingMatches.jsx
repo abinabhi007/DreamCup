@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './UpcomingMatches.module.scss';
 import { getMatches } from '../../src/services/matchService';
 
@@ -32,7 +34,13 @@ export default function UpcomingMatches() {
   };
 
   return (
-    <section className={styles.section}>
+    <motion.section 
+      className={styles.section}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-50px" }}
+    >
       <div className={styles.inner}>
         <h2 className={styles.sectionTitle}>Upcoming High-Stakes Matches</h2>
 
@@ -57,12 +65,12 @@ export default function UpcomingMatches() {
                   {/* Teams */}
                   <div className={styles.teams}>
                     <div className={styles.teamCol}>
-                      <img src={m.homeTeamFlag} alt={m.homeTeam} className={styles.flag} />
+                      <Image src={m.homeTeamFlag} alt={m.homeTeam} className={styles.flag} width={48} height={32} />
                       <span className={styles.teamCode}>{(m.homeTeam || '').substring(0, 3).toUpperCase()}</span>
                     </div>
                     <span className={styles.vs}>VS</span>
                     <div className={styles.teamCol}>
-                      <img src={m.awayTeamFlag} alt={m.awayTeam} className={styles.flag} />
+                      <Image src={m.awayTeamFlag} alt={m.awayTeam} className={styles.flag} width={48} height={32} />
                       <span className={styles.teamCode}>{(m.awayTeam || '').substring(0, 3).toUpperCase()}</span>
                     </div>
                   </div>
@@ -85,6 +93,6 @@ export default function UpcomingMatches() {
           </div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }

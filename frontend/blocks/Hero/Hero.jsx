@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styles from './Hero.module.scss';
 
 export default function Hero() {
@@ -8,7 +9,12 @@ export default function Hero() {
       <div className={styles.heroOverlay} />
       <div className="hero-gradient" style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }} />
 
-      <div className={styles.heroInner}>
+      <motion.div 
+        className={styles.heroInner}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
         {/* Live badge */}
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
@@ -38,7 +44,7 @@ export default function Hero() {
             View Leaderboard
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
