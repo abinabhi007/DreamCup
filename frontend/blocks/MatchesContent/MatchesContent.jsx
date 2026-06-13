@@ -361,7 +361,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                             className={styles.teamLogoBig} 
                             src={featuredMatch.homeTeamFlag || 'https://crests.football-data.org/764.svg'} 
                           />
-                          <p className={styles.teamName}>{featuredMatch.homeTeam.toUpperCase()}</p>
+                          <p className={styles.teamName}>{getAbbreviation(featuredMatch.homeTeam)}</p>
                         </div>
                         <div className={styles.matchInfoColBordered}>
                           <p className={styles.matchStage}>
@@ -382,7 +382,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                             className={styles.teamLogoBig} 
                             src={featuredMatch.awayTeamFlag || 'https://crests.football-data.org/773.svg'} 
                           />
-                          <p className={styles.teamName}>{featuredMatch.awayTeam.toUpperCase()}</p>
+                          <p className={styles.teamName}>{getAbbreviation(featuredMatch.awayTeam)}</p>
                         </div>
                       </div>
                       <div className={styles.matchAction}>
@@ -414,7 +414,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                             className={styles.teamLogoSmall} 
                             src={item.homeTeamFlag || 'https://crests.football-data.org/764.svg'} 
                           />
-                          <p className={styles.teamNameDim}>{item.homeTeam.toUpperCase()}</p>
+                          <p className={styles.teamNameDim}>{getAbbreviation(item.homeTeam)}</p>
                         </div>
                         <div className={styles.matchInfoCol}>
                           {item.status === 'FINISHED' || ['LIVE', 'IN_PLAY', 'PAUSED', 'HT'].includes(item.status) ? (
@@ -432,7 +432,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                             className={styles.teamLogoSmall} 
                             src={item.awayTeamFlag || 'https://crests.football-data.org/773.svg'} 
                           />
-                          <p className={styles.teamNameDim}>{item.awayTeam.toUpperCase()}</p>
+                          <p className={styles.teamNameDim}>{getAbbreviation(item.awayTeam)}</p>
                         </div>
                       </div>
                       <div className={styles.matchAction}>
@@ -507,7 +507,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                               <td>{team.position}</td>
                               <td className={styles.teamCol}>
                                 <img src={team.flag} alt={team.team} className={styles.teamLogoMicro} />
-                                {team.team}
+                                {getAbbreviation(team.team)}
                               </td>
                               <td>{team.playedGames}</td>
                               <td>{team.won}</td>
@@ -555,7 +555,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                               <span className="material-symbols-outlined" style={{ opacity: 0.5 }}>person</span>
                               {scorer.player}
                             </td>
-                            <td>{scorer.team}</td>
+                            <td>{getAbbreviation(scorer.team)}</td>
                             <td className={styles.pointsCol}>{scorer.goals}</td>
                           </tr>
                         ))}
