@@ -5,6 +5,10 @@
   background: var(--dc-surface-container-high);
   border-top: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
+
+  @media (max-width: 767px) {
+    padding: 24px 16px;
+  }
 }
 
 .inner {

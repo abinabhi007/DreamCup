@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './Header.module.scss';
 
 export default function Header() {
@@ -14,14 +16,17 @@ export default function Header() {
 
   return (
     <>
-      <header
+      <motion.header
         className={styles.header}
         style={scrolled ? { background: 'rgba(16,20,21,0.95)' } : {}}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
       >
         <nav className={styles.nav}>
           {/* Logo */}
          <Link href="/"> <div className={styles.logoWrap}>
-            <img src="/premium_logo.png" alt="DreamCup Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
+            <Image src="/premium_logo.png" alt="DreamCup Logo" width={120} height={40} style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
             <span className={styles.logoText}>Dream<span style={{ color: '#ffe16d' }}>Cup</span></span>
           </div></Link>
 
@@ -48,7 +53,7 @@ export default function Header() {
             </span>
           </div>
         </nav>
-      </header>
+      </motion.header>
 
       {/* Mobile Sidebar Overlay */}
       {menuOpen && (
@@ -56,7 +61,7 @@ export default function Header() {
           <div className={styles.sidebar} onClick={(e) => e.stopPropagation()}>
             <div className={styles.sidebarHeader}>
               <div className={styles.logoWrap}>
-                <img src="/premium_logo.png" alt="DreamCup Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+                <Image src="/premium_logo.png" alt="DreamCup Logo" width={100} height={32} style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
                 <span className={styles.logoText}>DreamCup</span>
               </div>
               <span 

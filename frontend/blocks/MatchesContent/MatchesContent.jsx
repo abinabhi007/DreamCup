@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './MatchesContent.module.scss';
 import { getMatchById } from '../../src/services/matchService';
 
@@ -283,25 +285,32 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
             </div>
           </div>
           <div className={styles.actionsWrap}>
-            <button className={styles.actionBtn}>
+            {/* <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">notifications</span>
               <span className={styles.badgeDot}></span>
-            </button>
+            </button> */}
             <button className={styles.actionBtn}>
               <span className="material-symbols-outlined">history</span>
             </button>
             <div className={styles.userProfileGroup}>
-              <img 
+              <Image 
                 alt="Profile Avatar" 
                 className={styles.userAvatar} 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnCnqmmL-tij-ORdQXOMOswKzV9PUI2XsGy0MDO-0tY6zGVtZqko2_toFEM7xKRcl9orKTgGPPDQoNCj9q6Ag4zOc_CJtwGAiGpHbuoTSDrYJR_5mqAkV8crCCfsVaKZodP5zMWdioZzgg6iKYg8El-URKZDAiJjx3C6tTHi5cR2gOLR9shlofLJoGqKRNw4NHCLTibU8A5XR-J_j_cVo9nHg9pf5rnrB0Ar4XQWw0StvrCPwoQD10lbn7JY8cLMGfXxGz34S5fIg"
+                width={32}
+                height={32}
               />
             </div>
           </div>
         </header>
 
         {/* Split Layout Container */}
-        <div className={styles.splitLayout}>
+        <motion.div 
+          className={styles.splitLayout}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           
           {/* Left Column: Match Lists */}
           <div className={styles.matchListCol}>
@@ -356,12 +365,14 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                     >
                       <div className={styles.matchTeamsWrap}>
                         <div className={styles.teamCol}>
-                          <img 
+                          <Image 
                             alt={featuredMatch.homeTeam} 
                             className={styles.teamLogoBig} 
                             src={featuredMatch.homeTeamFlag || 'https://crests.football-data.org/764.svg'} 
+                            width={64}
+                            height={64}
                           />
-                          <p className={styles.teamName}>{featuredMatch.homeTeam.toUpperCase()}</p>
+                          <p className={styles.teamName}>{getAbbreviation(featuredMatch.homeTeam)}</p>
                         </div>
                         <div className={styles.matchInfoColBordered}>
                           <p className={styles.matchStage}>
@@ -377,12 +388,14 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                           <p className={styles.matchVenue}>{formatMatchDate(featuredMatch.date)}</p>
                         </div>
                         <div className={styles.teamCol}>
-                          <img 
+                          <Image 
                             alt={featuredMatch.awayTeam} 
                             className={styles.teamLogoBig} 
                             src={featuredMatch.awayTeamFlag || 'https://crests.football-data.org/773.svg'} 
+                            width={64}
+                            height={64}
                           />
-                          <p className={styles.teamName}>{featuredMatch.awayTeam.toUpperCase()}</p>
+                          <p className={styles.teamName}>{getAbbreviation(featuredMatch.awayTeam)}</p>
                         </div>
                       </div>
                       <div className={styles.matchAction}>
@@ -409,12 +422,14 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                     >
                       <div className={styles.matchTeamsWrap}>
                         <div className={styles.teamCol}>
-                          <img 
+                          <Image 
                             alt={item.homeTeam} 
                             className={styles.teamLogoSmall} 
                             src={item.homeTeamFlag || 'https://crests.football-data.org/764.svg'} 
+                            width={40}
+                            height={40}
                           />
-                          <p className={styles.teamNameDim}>{item.homeTeam.toUpperCase()}</p>
+                          <p className={styles.teamNameDim}>{getAbbreviation(item.homeTeam)}</p>
                         </div>
                         <div className={styles.matchInfoCol}>
                           {item.status === 'FINISHED' || ['LIVE', 'IN_PLAY', 'PAUSED', 'HT'].includes(item.status) ? (
@@ -427,12 +442,14 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                           <p className={styles.matchVenue}>{formatMatchDate(item.date)}</p>
                         </div>
                         <div className={styles.teamCol}>
-                          <img 
+                          <Image 
                             alt={item.awayTeam} 
                             className={styles.teamLogoSmall} 
                             src={item.awayTeamFlag || 'https://crests.football-data.org/773.svg'} 
+                            width={40}
+                            height={40}
                           />
-                          <p className={styles.teamNameDim}>{item.awayTeam.toUpperCase()}</p>
+                          <p className={styles.teamNameDim}>{getAbbreviation(item.awayTeam)}</p>
                         </div>
                       </div>
                       <div className={styles.matchAction}>
@@ -506,8 +523,8 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                             <tr key={team.team}>
                               <td>{team.position}</td>
                               <td className={styles.teamCol}>
-                                <img src={team.flag} alt={team.team} className={styles.teamLogoMicro} />
-                                {team.team}
+                                <Image src={team.flag} alt={team.team} className={styles.teamLogoMicro} width={24} height={24} />
+                                {getAbbreviation(team.team)}
                               </td>
                               <td>{team.playedGames}</td>
                               <td>{team.won}</td>
@@ -555,7 +572,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
                               <span className="material-symbols-outlined" style={{ opacity: 0.5 }}>person</span>
                               {scorer.player}
                             </td>
-                            <td>{scorer.team}</td>
+                            <td>{getAbbreviation(scorer.team)}</td>
                             <td className={styles.pointsCol}>{scorer.goals}</td>
                           </tr>
                         ))}
@@ -708,7 +725,7 @@ export default function MatchesContent({ matches = [], liveMatches: liveMatchesP
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

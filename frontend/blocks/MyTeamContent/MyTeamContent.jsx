@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './MyTeamContent.module.scss';
 import { getPlayers, getTeams } from '../../src/services/playerService';
 import {
@@ -295,10 +297,12 @@ export default function MyTeamContent() {
             className={styles.slotCircleFilled}
             onClick={(e) => handlePlayerSlotClick(player, e)}
           >
-            <img
+            <Image
               src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
               alt={player.name}
               className={styles.slotPlayerImage}
+              width={60}
+              height={60}
             />
           </div>
           <span className={styles.slotPlayerName}>{player.name}</span>
@@ -325,7 +329,12 @@ export default function MyTeamContent() {
   };
 
   return (
-    <div className={styles.mainLayout}>
+    <motion.div 
+      className={styles.mainLayout}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Top Header */}
       <header className={styles.topHeader}>
         <div>
@@ -411,10 +420,12 @@ export default function MyTeamContent() {
                           className={styles.slotCircleFilled}
                           onClick={(e) => handlePlayerSlotClick(player, e)}
                         >
-                          <img
+                          <Image
                             src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
                             alt={player.name}
                             className={styles.slotPlayerImage}
+                            width={60}
+                            height={60}
                           />
                         </div>
                         <span className={styles.slotPlayerName}>{player.name}</span>
@@ -538,9 +549,12 @@ export default function MyTeamContent() {
                     <div key={player._id} className={styles.playerCard}>
                       <div className={styles.playerInfoWrap}>
                         <div className={styles.playerAvatar}>
-                          <img
+                          <Image
                             src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
                             alt={player.name}
+                            width={48}
+                            height={48}
+                            style={{ objectFit: 'cover' }}
                           />
                         </div>
                         <div>
@@ -599,9 +613,11 @@ export default function MyTeamContent() {
             <div className={styles.avatarsStack}>
               {draftedPlayers.slice(0, 3).map((p, idx) => (
                 <div key={idx} className={styles.stackAvatarEmpty} style={{ border: 'none', overflow: 'hidden' }}>
-                  <img
+                  <Image
                     src={p.countryFlag || p.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
                     alt={p.name}
+                    width={32}
+                    height={32}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
@@ -627,7 +643,7 @@ export default function MyTeamContent() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

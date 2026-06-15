@@ -2,6 +2,10 @@
 .section {
   padding: 80px 24px;
   background: var(--dc-background);
+
+  @media (max-width: 767px) {
+    padding: 48px 16px;
+  }
 }
 
 .inner {
@@ -141,10 +145,23 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
 }
 
 .cardBottomLeft {}
-.cardBottomRight { text-align: right; }
+.cardBottomRight {
+  text-align: right;
+
+  @media (max-width: 575px) {
+    text-align: left;
+  }
+}
 
 .captainBadge {
   display: inline-block;
@@ -167,6 +184,10 @@
   letter-spacing: -0.02em;
   color: var(--dc-secondary);
   margin: 0;
+
+  @media (max-width: 575px) {
+    font-size: 24px;
+  }
 }
 
 .playerMeta {
@@ -182,6 +203,10 @@
   letter-spacing: -0.02em;
   color: var(--dc-secondary-fixed);
   margin: 0;
+
+  @media (max-width: 575px) {
+    font-size: 24px;
+  }
 }
 
 .ptsLabel {
@@ -211,6 +236,11 @@
   letter-spacing: -0.01em;
   color: var(--dc-secondary);
   margin: 0;
+
+  @media (max-width: 767px) {
+    font-size: 20px;
+    line-height: 28px;
+  }
 }
 
 .playerMetaSm {

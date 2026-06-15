@@ -2,6 +2,10 @@
 // Matches prototype: py-32 px-gutter
 .section {
   padding: 80px 24px;
+
+  @media (max-width: 767px) {
+    padding: 48px 16px;
+  }
 }
 
 // max-w-container-max mx-auto rounded-3xl overflow-hidden relative glass-panel p-32 text-center border border-white/10

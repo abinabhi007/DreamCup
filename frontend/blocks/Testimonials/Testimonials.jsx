@@ -1,4 +1,6 @@
 import { useRef } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './Testimonials.module.scss';
 
 const TESTIMONIALS = [
@@ -75,7 +77,13 @@ export default function Testimonials() {
   const scrollRightBtn = () => sliderRef.current.scrollBy({ left: 400, behavior: 'smooth' });
 
   return (
-    <section className={styles.section}>
+    <motion.section 
+      className={styles.section}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className={styles.inner}>
         <h2 className={styles.title}>Words from the Elite</h2>
 
@@ -115,10 +123,13 @@ export default function Testimonials() {
 
                 {/* Author */}
                 <div className={styles.author}>
-                  <img
+                  <Image
                     src={t.avatar}
                     alt={t.name}
                     className={styles.avatar}
+                    width={48}
+                    height={48}
+                    style={{ objectFit: 'cover' }}
                   />
                   <div>
                     <p className={styles.authorName}>{t.name}</p>
@@ -130,6 +141,6 @@ export default function Testimonials() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

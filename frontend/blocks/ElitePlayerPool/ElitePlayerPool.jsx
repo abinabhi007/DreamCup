@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './ElitePlayerPool.module.scss';
 import { getLeaderboard } from '../../src/services/leaderboardService';
 
@@ -47,7 +49,13 @@ export default function ElitePlayerPool() {
   });
 
   return (
-    <section className={styles.section}>
+    <motion.section 
+      className={styles.section}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-50px" }}
+    >
       <div className={styles.inner}>
         {/* Section header */}
         <div className={styles.sectionHeader}>
@@ -65,10 +73,11 @@ export default function ElitePlayerPool() {
         <div className={styles.grid}>
           {/* Large card — Kylian Mbappé (md:col-span-8) */}
           <div className={`${styles.cardLarge} glass-panel premium-border`}>
-            <img
+            <Image
               src="https://upload.wikimedia.org/wikipedia/commons/b/b3/2022_FIFA_World_Cup_France_4%E2%80%931_Australia_-_%287%29_%28cropped%29.jpg"
               alt="Kylian Mbappé"
               className={styles.cardImg}
+              fill
               style={{ objectPosition: 'top' }}
             />
             <div className={styles.cardGradient} />
@@ -89,10 +98,11 @@ export default function ElitePlayerPool() {
           <div className={styles.rightCol}>
             {/* Messi card (md:col-span-4) */}
             <div className={`${styles.cardSmall} glass-panel`}>
-              <img
+              <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"
                 alt="Lionel Messi"
                 className={`${styles.cardImg} ${styles.cardImgDim}`}
+                fill
                 style={{ objectPosition: 'top' }}
               />
               <div className={styles.cardGradient} />
@@ -108,10 +118,11 @@ export default function ElitePlayerPool() {
 
             {/* Ronaldo card (md:col-span-4) */}
             <div className={`${styles.cardSmall} glass-panel`}>
-              <img
+              <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg"
                 alt="Cristiano Ronaldo"
                 className={`${styles.cardImg} ${styles.cardImgDim}`}
+                fill
                 style={{ objectPosition: 'top' }}
               />
               <div className={styles.cardGradient} />
@@ -138,7 +149,7 @@ export default function ElitePlayerPool() {
                     <div key={item.rank} className={styles.lbRow}>
                       <div className={styles.lbLeft}>
                         <span className={`${styles.lbRank}${item.isTop ? ' ' + styles.lbRankTop : ''}`}>{item.rank}</span>
-                        <img src={item.avatar} alt={item.name} className={styles.lbAvatar} />
+                        <Image src={item.avatar} alt={item.name} className={styles.lbAvatar} width={40} height={40} />
                         <div>
                           <p className={styles.lbName}>{item.name}</p>
                           <p className={styles.lbMeta}>{item.meta}</p>
@@ -153,6 +164,6 @@ export default function ElitePlayerPool() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

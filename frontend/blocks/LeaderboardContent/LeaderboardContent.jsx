@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './LeaderboardContent.module.scss';
 import { getLeaderboard } from '../../src/services/leaderboardService';
 
@@ -98,7 +100,12 @@ export default function LeaderboardContent() {
   const tableData = filteredLeaderboard;
 
   return (
-    <div className={styles.mainContent}>
+    <motion.div 
+      className={styles.mainContent}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Fixed Top NavBar */}
       <header className={styles.topNav}>
         <div className={styles.topNavTitle}>Leaderboard</div>
@@ -116,16 +123,18 @@ export default function LeaderboardContent() {
             />
           </div>
           <div className={styles.actionBtnRow}>
-            <button className={styles.actionBtn} title="Notifications">
+            {/* <button className={styles.actionBtn} title="Notifications">
               <span className="material-symbols-outlined">notifications</span>
             </button>
             <button className={styles.actionBtn} title="Settings">
               <span className="material-symbols-outlined">settings</span>
-            </button>
-            <img
+            </button> */}
+            <Image
               alt="User Profile"
               className={styles.userAvatar}
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa93ePsXII7nFw7bZRtdnlC7uNLLIj0Yz1FPoC5eO4XG_W7M_tHth38x6b2KtzNUIVQY-WQ_wEDKnzvQy2LrU4rgfVTpTuVcOB0DnxoOzczdv1JmmsUqU-8GVHV_0_FTgE-msjR7nzTnIU8eKaJCxfp2AwNwS3xEXjKuIZ7TNm4kbjFv8qoxuUWuaCy-EdmeZknGndciAVgXu7Eppli00bYY9LhYk6lk_PX5OlptaXpB4JmNRLC2vtipwoKqQzXdpQWv-Pv4aoq1Y"
+              width={40}
+              height={40}
             />
           </div>
         </div>
@@ -163,7 +172,7 @@ export default function LeaderboardContent() {
                 <div key={index} className={item.styleClass}>
                   <div className={styles.avatarContainer}>
                     <div className={`${styles.avatarWrapper} ${item.avatarClass}`}>
-                      <img alt={`Manager ${item.rank}`} src={item.avatar} className={styles.avatarImg} />
+                      <Image alt={`Manager ${item.rank}`} src={item.avatar} className={styles.avatarImg} fill style={{ objectFit: 'cover' }} />
                       {item.rank === 1 && (
                         <div className={styles.crownIcon}>
                           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
@@ -250,7 +259,7 @@ export default function LeaderboardContent() {
                         </td>
                         <td className={styles.tableTd}>
                           <div className={styles.managerCell}>
-                            <img alt={`Manager ${item.rank}`} src={item.avatar} className={styles.tableAvatar} />
+                            <Image alt={`Manager ${item.rank}`} src={item.avatar} className={styles.tableAvatar} width={32} height={32} style={{ objectFit: 'cover' }} />
                             <span className={styles.tableManagerName}>{item.name}</span>
                           </div>
                         </td>
@@ -292,7 +301,7 @@ export default function LeaderboardContent() {
           <a href="#" onClick={e => e.preventDefault()} className={styles.footerLink}>API</a>
         </div>
       </footer>
-    </div>
+    </motion.div>
   );
 }
 

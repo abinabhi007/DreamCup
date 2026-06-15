@@ -3,6 +3,10 @@
 .section {
   padding: 80px 24px;
   background: var(--dc-background);
+
+  @media (max-width: 767px) {
+    padding: 48px 16px;
+  }
 }
 
 .inner {
@@ -48,6 +52,14 @@
   &.matchCardPrimary {
     border-left: 4px solid var(--dc-secondary-fixed) !important;
   }
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    padding: 20px 16px;
+  }
 }
 
 // Teams left side
@@ -92,6 +104,14 @@
 // Right info
 .matchInfo {
   text-align: right;
+
+  @media (max-width: 575px) {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }
 
 .matchWhen {
@@ -138,5 +158,11 @@
     border: 1px solid rgba(255,255,255,0.1);
 
     &:hover { background: rgba(255,255,255,0.05); }
+  }
+
+  @media (max-width: 575px) {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 12px;
   }
 }

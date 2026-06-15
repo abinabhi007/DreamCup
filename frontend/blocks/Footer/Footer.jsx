@@ -1,13 +1,21 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './Footer.module.scss';
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <motion.footer
+      className={styles.footer}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+    >
       <div className={styles.inner}>
         <div className={styles.colLeft}>
           <div className={styles.brand}>
-            <img src="/premium_logo.png" alt="DreamCup Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+            <Image src="/premium_logo.png" alt="DreamCup Logo" width={100} height={32} style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
             <span>DreamCup</span>
           </div>
           <p className={styles.brandDesc}>
@@ -33,6 +41,6 @@ export default function Footer() {
       <div className={styles.copyright}>
         © 2026 DreamCup Elite Performance Fantasy. All rights reserved by <Link href="https://abinhn.vercel.app" target='_blank' style={{color:"#ffe16d",textDecoration:"none"}}> Abin HN</Link>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

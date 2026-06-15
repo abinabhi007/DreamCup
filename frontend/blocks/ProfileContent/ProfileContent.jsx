@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import styles from './ProfileContent.module.scss';
 import { getProfile, updateProfile } from '../../src/services/authService';
 import { getFinishedMatches, getMatches } from '../../src/services/matchService';
@@ -145,7 +147,7 @@ export default function ProfileContent() {
     return (
       <div className={styles.playerDotWrap} key={player._id}>
         <div className={styles.playerAvatarWrap}>
-          <img className={styles.playerAvatar} alt={player.name} src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} />
+          <Image className={styles.playerAvatar} alt={player.name} src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'} width={48} height={48} style={{ objectFit: 'cover' }} />
         </div>
         <div className={styles.playerName}>{nameText}</div>
         <div className={player.points > 0 ? styles.playerScoreGold : styles.playerScore}>
@@ -201,14 +203,14 @@ export default function ProfileContent() {
 
         {/* Right Details Group */}
         <div className={styles.actionsWrap}>
-          <div className={styles.actionBtnRow}>
+          {/* <div className={styles.actionBtnRow}>
             <button className={styles.actionBtn} title="Notifications">
               <span className="material-symbols-outlined">notifications</span>
             </button>
             <button className={styles.actionBtn} title="Settings">
               <span className="material-symbols-outlined">settings</span>
             </button>
-          </div>
+          </div> */}
 
           <div className={styles.divider}></div>
 
@@ -217,24 +219,34 @@ export default function ProfileContent() {
               <p className={styles.userName}>{profileData?.user?.name}</p>
               <p className={styles.userTitle}>{profileData?.role}</p>
             </div>
-            <img
+            <Image
               alt="User profile avatar"
               className={styles.userAvatar}
               src={profileData?.user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuAdUa76z0i-su3duW4oo2oCgrgsARwp6Ozrel3PvY5Mg595coXaOvuWs9NS6ymkI5cOZEKSThn22DslhLhd23nAA6ggRWc2fo5TB_2baJ-3sYFHq6LJkIcu0EO5zoIeZLGv_Y8JEY2GXhNlYERZ7-UNuUxqnFIt7mLUU5ZGKRZXff-DY0NuiyNWEQfNqOHQaJZGOSAjyxXdDZ-HUtPI337V2JqRk23601zAeWbEsgbEeEcH-QWM-_IoxGi8GsmrelciYzp64T_i5iU"}
+              width={40}
+              height={40}
+              style={{ objectFit: 'cover' }}
             />
           </div>
         </div>
       </header>
 
       {/* ── Scrollable Content Area ── */}
-      <div className={styles.contentArea}>
+      <motion.div 
+        className={styles.contentArea}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
 
         {/* Profile Header Banner Section */}
         <section className={styles.heroBanner}>
-          <img
+          <Image
             alt="Elite Sports Background"
             className={styles.heroBgImage}
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYHU3MpeF0h4emP6LY0IYxPGez7mGQv9CtMGv8YCTgTPmo2XKnSL9giQjwfh2TKrc8uAFQ2Ov2I32ahMmSR05LI1nXul7iaYmYZjngfOZopeyAU358TRCzTuEC-JFsQm2ZZQXtKbIEqv-JsRAnc4yBxzgBPcNMp5__3v6yTiD-w4J44dN4upDvTE1oukm14FcfqyF6zuTr9UCRVXaxIS3VYCjLKZxUKX0qMi3KxEwVgCh-p_3SvYTUvLbDCrGxOHkVPgMll95rllg"
+            fill
+            style={{ objectFit: 'cover' }}
           />
           <div className={styles.heroGradientOverlay}></div>
 
@@ -242,10 +254,13 @@ export default function ProfileContent() {
             {/* Avatar frame */}
             <div className={styles.avatarWrapper}>
               <div className={styles.profileAvatarFrame}>
-                <img
+                <Image
                   alt="Profile Avatar"
                   className={styles.profileAvatar}
                   src={profileData?.user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuDGlH6OHIQZT-Jtv_DJWUSRbqPYCfgQ684ue1hX_pjtCyL1my5bjJHcapXAKVsygReV_7vi_KVDENFUSZecDyRyzo3sRV1-O8CtGyOJ6_-xZqRR6IEehbMnKozSbn0KRc40Dj8-9nHyutiISnfcheEOEboCHobCPLnoJaw5ypjeHm0MnMGrNdG584U1xEGxVk78gIeiJ3rYKpVN1dA98jBxhcIABu-JJ28qi7CCuirzynqhSMOVg9Rw5m7ZA4VZWOwHbDUPnYB66wM"}
+                  width={120}
+                  height={120}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
 
@@ -405,9 +420,9 @@ export default function ProfileContent() {
                   <div key={item.id || idx} className={styles.historyItem}>
                     <div className={styles.historyDetails}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <img src={item.homeTeamFlag} alt={item.homeTeam} style={{ width: 24, height: 24, objectFit: 'contain' }} />
+                        <Image src={item.homeTeamFlag} alt={item.homeTeam} width={24} height={24} style={{ objectFit: 'contain' }} />
                         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>VS</span>
-                        <img src={item.awayTeamFlag} alt={item.awayTeam} style={{ width: 24, height: 24, objectFit: 'contain' }} />
+                        <Image src={item.awayTeamFlag} alt={item.awayTeam} width={24} height={24} style={{ objectFit: 'contain' }} />
                       </div>
                       <div className={styles.historyMeta} style={{ marginLeft: 16 }}>
                         <p className={styles.gwName}>{item.homeTeam} vs {item.awayTeam}</p>
@@ -439,8 +454,8 @@ export default function ProfileContent() {
                       <div key={match.id || index} className={styles.fixtureCard}>
                         <div className={styles.fixtureInfoWrap}>
                           <div className={styles.teamsBadgeStack}>
-                            <img src={match.homeTeamFlag || 'https://crests.football-data.org/764.svg'} alt={homeAbbr} className={styles.teamBadge} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
-                            <img src={match.awayTeamFlag || 'https://crests.football-data.org/773.svg'} alt={awayAbbr} className={styles.teamBadge} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
+                            <Image src={match.homeTeamFlag || 'https://crests.football-data.org/764.svg'} alt={homeAbbr} className={styles.teamBadge} width={32} height={32} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
+                            <Image src={match.awayTeamFlag || 'https://crests.football-data.org/773.svg'} alt={awayAbbr} className={styles.teamBadge} width={32} height={32} style={{ backgroundColor: 'transparent', padding: 0, objectFit: 'contain' }} />
                           </div>
                           <div>
                             <p className={styles.fixtureMatchName}>{homeAbbr} vs {awayAbbr}</p>
@@ -471,9 +486,12 @@ export default function ProfileContent() {
                       <div className={styles.leaderInfo}>
                         <span className={styles.leaderRank}>{index < 9 ? `0${index + 1}` : index + 1}</span>
                         <div className={styles.leaderAvatar}>
-                          <img
+                          <Image
                             alt={player.name}
                             src={player.countryFlag || player.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBC0YEeyCchMgKfxPQt4ZQPL7azLWJAF91b8JZST4oqUaTulGXGe4Mm32jp_0Lr3sQBTA2ywXTFYBecqC1_rqqgqSpvm-wreK0G_B6wRsX-bNVz0CIce3yyJj4Jkr1KHzFzW9pOOZIAGR5CS_24uOPsQSWMZFsDXmJfglWBgOoKYUjG8LIbOZQv_xFRrY6SaCaVyON0QPLQUAx7LYKQ1QY4w7t4J0U5pfcBjtEvvLUP1RMzPbuvljjYf0VUqyoro-YOoczZC_12ULA'}
+                            width={40}
+                            height={40}
+                            style={{ objectFit: 'cover' }}
                           />
                         </div>
                         <span className={styles.leaderName}>{player.name}</span>
@@ -510,7 +528,7 @@ export default function ProfileContent() {
           </div>
         </section>
 
-      </div>
+      </motion.div>
 
       {/* Edit Profile Modal */}
       {isEditingProfile && (
