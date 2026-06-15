@@ -83,7 +83,7 @@ https://dreamcup.vercel.app/
 ### Deployment
 
 * Vercel (Frontend)
-* Render (Backend)
+* Railway (Backend)
 * MongoDB Atlas (Database)
 
 ---
