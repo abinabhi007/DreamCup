@@ -10,6 +10,7 @@ import {
   removePlayer as apiRemovePlayer,
   setCaptain as apiSetCaptain,
   setViceCaptain as apiSetViceCaptain,
+  resetTeam as apiResetTeam,
 } from '../../src/services/teamService';
 import toast from 'react-hot-toast';
 
@@ -203,7 +204,7 @@ export default function MyTeamContent() {
     const toastId = toast.loading('Resetting squad...');
     try {
       const token = localStorage.getItem('token');
-      await Promise.all(team.players.map((p) => apiRemovePlayer(p._id, token)));
+      await apiResetTeam(token);
       toast.success('Squad reset successfully!', { id: toastId });
       fetchTeamData();
     } catch (error) {

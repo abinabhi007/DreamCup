@@ -405,6 +405,39 @@ const getPlayersForMatch = async (req, res) => {
   }
 };
 
+const resetTeam = async (req, res) => {
+  try {
+    const team = await FantasyTeam.findOne({
+      userId: req.user._id,
+    });
+
+    if (!team) {
+      return res.status(404).json({
+        success: false,
+        message: "Team not found",
+      });
+    }
+
+    team.players = [];
+    team.budgetRemaining = 100;
+    team.captain = null;
+    team.viceCaptain = null;
+
+    await team.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Team reset successfully",
+      team,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
 
 module.exports = {
@@ -414,5 +447,6 @@ module.exports = {
   removePlayer,
   setCaptain,
   setViceCaptain,
-  getPlayersForMatch
+  getPlayersForMatch,
+  resetTeam
 };

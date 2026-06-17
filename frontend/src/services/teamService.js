@@ -42,6 +42,13 @@ export const removePlayer = async (playerId, token) => {
   return response.data;
 };
 
+export const resetTeam = async (token) => {
+  const response = await axios.delete(`${API_URL}/api/team/reset`, {
+    headers: getHeaders(token),
+  });
+  return response.data;
+};
+
 export const setCaptain = async (playerId, token) => {
   const response = await axios.put(
     `${API_URL}/api/team/set-captain`,
